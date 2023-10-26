@@ -1,3 +1,5 @@
+import numpy
+
 class TreeNode: #this class represents the tree, por nodes
   def __init__(self, data):
     self.data = data #what data you want to represent
