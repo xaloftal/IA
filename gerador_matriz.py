@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 import xlsxwriter
+import openpyxl
+
 
 
 #criar matriz aleatória com 0 e 1
