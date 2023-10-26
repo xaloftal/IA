@@ -1,54 +1,72 @@
-#abrem o anaconda powershell e depois colem isto:  conda init powershell
-class NoArvore: #esta classe representa a arvore; um no individual da arvore
-    def __init__(self, valor): 
-      self.valor = valor 
-      self.filhos = [] #numero de filhos
-      self.pai = None
+class TreeNode: #this class represents the tree, por nodes
+  def __init__(self, data):
+    self.data = data #what data you want to represent
+    self.children = [] #instancias da tree node class
+    self.parent = None
+  
+  #metodo para adicionar filhos
+  def add_child(self, child): 
+    child.parent = self #o self vai se tornar o parent do child
+    self.children.append(child) 
 
-    def adicionar_filho(self, filho): #adicionar um filho ao objeto self, tornando o self o pai
-        filho.pai = self
-        self.filhos.append(filho)
+  #tells the level of the node
+  def get_level(self): 
+    #count number of parents/ancestors
+    level = 0
+    p = self.parent
+    while p: #enquanto existe um parente (enquanto não é root). visto por exemplo da folha para a root. vai do fundo para cima
+      level += 1
+      p = p.parent
+    return level  
 
-    def procurar_nivel(self): #conta se o numero de antepassados (pais anteriores)
-        nivel = 0 #o no raiz esta no nivel 0
-        p = self.pai
-        while p: #enquanto existir pai incrementa-se um nivel
-           nivel += 1 
-           p = p.pai
-        return nivel
+  #metodo para mostrar os dados
+  def print_tree(self):
+    spaces = ' ' * self.get_level() * 3 #adiciona 3 espaços a cada nivel
+    prefix = spaces + "|__" if self.parent else "" #usa outros caracteres para mostrar a hierarquia mais facilmente. se for root, nao poe nada
 
-    def mostrar_arvore(self): #funcao para imprimir a arvore
-      espacos = ' ' * self.procurar_nivel()  #isto inicializa um espaco a cada nivel; nivel 1 com 1 espaco, 2 com 2 e etc..
-      ramo = espacos + "|_" if self.pai else "" #se existir pai
-      print(ramo + str(self.valor)) #imprime o pai
-      if len(self.filhos) > 0: #se houver filhos
-        for filho in self.filhos:
-            filho.mostrar_arvore() #imprime os valores dos seguintes filhos
+    print(prefix + self.data) 
+    #agora quero dar print aos filhos
+    if self.children: #self.children > 0
+      for child in self.children:
+        child.print_tree() #enquanto tiver filhos, vai sendo recursiva. quando for leaf node, não chama de volta sozinho.
 
 
-def construir_arvore():
-    raiz = NoArvore(1)
 
-    laptop = NoArvore(2)
-    laptop.adicionar_filho(NoArvore("Mac"))
-    laptop.adicionar_filho(NoArvore("Surface"))
-    laptop.adicionar_filho(NoArvore("Thinkpad"))
+#
+#
+# EXEMPLO DE ARVORE
+#
+#
 
-    cellphone = NoArvore("Cell Phone")
-    cellphone.adicionar_filho(NoArvore("iPhone"))
-    cellphone.adicionar_filho(NoArvore("Google Pixel"))
-    cellphone.adicionar_filho(NoArvore("Vivo"))
+#construir uma arvore
+def build_product_tree():
+  root = TreeNode("Electronics")
 
-    tv = NoArvore("TV")
-    tv.adicionar_filho(NoArvore("Samsung"))
-    tv.adicionar_filho(NoArvore("LG"))
+  #laptop e os filhos
+  laptop = TreeNode("Laptop")
+  laptop.add_child(TreeNode("Mac")) #cada child é uma instância de TreeNode
+  laptop.add_child(TreeNode("Surface"))
+  laptop.add_child(TreeNode("Thinkpad"))
 
-    raiz.adicionar_filho(laptop)
-    raiz.adicionar_filho(cellphone)
-    raiz.adicionar_filho(tv)
+  #cellphone e os seus filhos
+  cellphone = TreeNode("Cell phone")
+  cellphone.add_child(TreeNode("iPhone")) 
+  cellphone.add_child(TreeNode("Google Pixel")) 
+  cellphone.add_child(TreeNode("Vivo"))   
 
-    raiz.mostrar_arvore()
+  #tv e os seus filhos
+  tv = TreeNode("TV")
+  tv.add_child(TreeNode("Samsung"))
+  tv.add_child(TreeNode("LG"))
+
+  #filhos de eletronics
+  root.add_child(laptop)
+  root.add_child(cellphone)
+  root.add_child(tv)
+
+  return root
 
 if __name__ == '__main__':
-    construir_arvore()
-
+  root = build_product_tree()
+  root.print_tree()
+  pass
