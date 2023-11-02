@@ -1,3 +1,4 @@
+from matrizes import *
 import heapq
 
 class Node:
@@ -113,18 +114,11 @@ def construct_path(node):
     return path[::-1]  # Reverse the path to get it from start to goal.
 
 # Example usage
-matrix = [
-    [0, 0, 0, 0, 0],
-    [0, 1, 1, 0, 0],
-    [0, 0, 0, 0, 1],
-    [0, 1, 1, 1, 0],
-    [0, 0, 0, 0, 0]
-]
 
 start = (0, 0)
 goal = (4, 4)
 
-path = astar(matrix, start, goal)
+path = astar(matriz2525, start, goal)
 if path:
     print("Path found:", path)
 else:
