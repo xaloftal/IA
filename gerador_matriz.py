@@ -7,7 +7,7 @@ import xlsxwriter
 #A = np.random.randint(0, 2, (8, 8))
 #print(A)
 
-A = np.random.choice([0, 1], size = (10,10), p = [.7,.3])
+A = np.random.choice([0, 1], size = (40,40), p = [.75,.25])
 print(A)
 
 #escrever matriz em excel
