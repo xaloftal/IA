@@ -1,100 +1,187 @@
 from matrizes import *
+from gerador_matriz import *
+import pygame
 
-import sys
-import queue
-class Cell  :
-    def __init__(self, x, y, dist, prev) :
-        self.x = x
-        self.y = y
-        self.dist = dist; #distance to start
-        self.prev = prev; #parent cell in the path
-    def __str__(self):
-        return "("+ str(self.x) + "," + str(self.y) + ")" 
+def create_menu():
+    print("Quer gerar uma matriz aleatória ou fixa?")
+    print("1. Aleatória")
+    print("2. Fixa")
+    choice = input("Opção:")
     
-class ShortestPathBetweenCellsBFS :
-    #BFS, Time O(n^2), Space O(n^2)
-    def shortestPath(self, matrix, start, end) :
-        sx = start[0]
-        sy = start[1]
-        dx = end[0]
-        dy = end[1]
-		#if start or end value is 0, return
-        if matrix[sx][sy] == 0 or matrix[dx][dy] == 0 :
-            print("There is no path.")
-            return  
-		#initialize the cells 
-        m = len(matrix)
-        n = len(matrix[0])    
-        cells = []
-        for i in range (0, m) :
-            row = []
-            for j in range(0, n) :               
-                if matrix[i][j] != 0 :
-                    row.append(Cell(i, j, sys.maxsize, None))
-                else:
-                    row.append(None)
-            cells.append(row) 
-	    #breadth first search
-        queue = []     
-        src = cells[sx][sy]
-        src.dist = 0
-        queue.append(src)
-        dest = None
-        p = queue.pop(0)
-        while p != None :
-	    	#find destination 
-            if p.x == dx and p.y == dy : 
-                dest = p
-                break	             
-	        # moving up
-            self.visit(cells, queue, p.x-1, p.y, p)    
-            # moving left
-            self.visit(cells, queue, p.x, p.y-1, p)     
-	        # moving down
-            self.visit(cells, queue, p.x+1, p.y, p)             
-	        #moving right
-            self.visit(cells, queue, p.x, p.y+1, p)
-            if len(queue) > 0:
-                p = queue.pop(0)
-            else:
-                p = None       
-	    #compose the path if path exists
-        if dest == None :
-            print("there is no path.")
-            return
-        else :
-            path = []
-            p = dest
-            while p != None :
-                path.insert(0, p)	      
-                p = p.prev	       
-            for i in path:
-                print(i)
-	
-	#function to update cell visiting status, Time O(1), Space O(1)
-    def visit(self, cells, queue, x, y, parent) :		
-        #out of boundary
-        if x < 0 or x >= len(cells) or y < 0 or y >= len(cells[0]) or cells[x][y] == None :
-	        return
-	    #update distance, and previous node
-        dist = parent.dist + 1
-        p = cells[x][y]
-        if dist < p.dist :
-            p.dist = dist
-            p.prev = parent
-            queue.append(p)
-matrix = [
-    [1, 0, 1],
-    [0, 1, 1],
-    [0, 0, 1]]
-myObj = ShortestPathBetweenCellsBFS()   
-#case1, there is no path
-start = [0, 0]
-end = [1, 1]
-print("case 1: ")
-myObj.shortestPath(matrix, start, end)
-#case 2, there is path
-start1 = [0, 2]
-end1 = [1, 1]
-print("case 2: ")
-myObj.shortestPath(matrix, start1, end1)
+    if choice == '1':
+        m_random = A
+        return m_random
+    elif choice == '2':
+        m_fix = (matriz1025, matriz1030, matriz2525, matriz2530)
+        return m_fix
+        pass
+    else:
+        print("Opção Inválida!")
+    
+        
+def solve(start_row, start_col):
+    q = []
+    q.append((start_row, start_col))
+    visited = [[False for i in range(cols)] for j in range(rows)]
+    visited[start_row][start_col] = True
+
+    prev = [[None for i in range(cols)] for j in range(rows)]
+    while len(q) > 0:
+        row, col = q.pop(0)
+        if m[row][col] == 'E':
+            return prev
+        
+        # Check adjacent cells
+        for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+            next_row = row + dr
+            next_col = col + dc
+            if (
+                next_row >= 0 and next_row < rows and
+                next_col >= 0 and next_col < cols and
+                not visited[next_row][next_col] and
+                m[next_row][next_col] != '#'
+            ):
+                q.append((next_row, next_col))
+                visited[next_row][next_col] = True
+                prev[next_row][next_col] = (row, col)
+
+    return None
+
+def reconstructPath(start_row, start_col, end_row, end_col, prev):
+    path = []
+    row, col = end_row, end_col
+    while (row, col) != (start_row, start_col):
+        path.append((row, col))
+        row, col = prev[row][col]
+    path.append((start_row, start_col))
+    path.reverse()
+    return path
+
+def find_start_and_end(m):
+    start_row, start_col, end_row, end_col = 0, 0, 0, 0
+    for i in range(len(m)):
+        for j in range(len(m[0])):
+            if m[i][j] == 'S':
+                start_row, start_col = i, j
+            elif m[i][j] == 'E':
+                end_row, end_col = i, j
+    return start_row, start_col, end_row, end_col
+
+
+def bfs(start_row, start_col, end_row, end_col):
+    prev = solve(start_row, start_col)
+    if prev is None:
+        print("Caminho não encontrado.")
+        return []
+    return reconstructPath(start_row, start_col, end_row, end_col, prev)
+
+m = [
+    ['S', '.', '.', '.', '.', '.', '.', '.', '.'],
+    ['.', '#', '#', '.', '#', '.', '#', '#', '.'],
+    ['.', '.', '.', '.', '#', '.', '.', '.', '.'],
+    ['#', '#', '.', '.', '.', '#', '#', '#', '#'],
+    ['.', '.', '.', '.', '.', '.', '.', '.', '.'],
+    ['.', '#', '#', '#', '#', '.', '.', '#', '.'],
+    ['.', '.', '.', '.', '#', '.', '.', '.', 'E']
+]
+
+rows = len(m)
+cols = len(m[0])
+start_row = 0
+start_col = 0
+end_row = 0
+end_col = 0
+
+for i in range(rows):
+    for j in range(cols):
+        if m[i][j] == 'S':
+            start_row = i
+            start_col = j
+        if m[i][j] == 'E':
+            end_row = i
+            end_col = j
+
+
+
+print("Labirinto:")
+for row in m:
+    print(' '.join(row))
+
+print("\nBuscando um caminho:")
+
+path = bfs(start_row, start_col, end_row, end_col)
+
+if len(path) > 0:
+    print("Caminho encontrado:")
+    for row, col in path:
+        m[row][col] = 'P'
+    for row in m:
+        print(' '.join(row))
+else:
+    print("Caminho não encontrado.")
+    
+# Tamanho da janela e células do labirinto
+cell_size = 30
+window_width = cols * cell_size
+window_height = rows * cell_size
+
+# Inicialização do Pygame
+
+window = pygame.display.set_mode((window_width, window_height))
+pygame.display.set_caption('Labirinto')
+
+# Cores
+YELLOW = (255, 255, 0)
+WHITE = (255, 255, 255)
+GREEN = (0, 255, 0)
+RED = (255, 0, 0)
+BLUE = (0, 0, 255)
+
+def draw_maze(window, m):
+    for y, row in enumerate(m):
+        for x, cell in enumerate(row):
+            if cell == '#':
+                pygame.draw.rect(window, RED, (x * cell_size, y * cell_size, cell_size, cell_size))
+            elif cell == 'S':
+                pygame.draw.rect(window, GREEN, (x * cell_size, y * cell_size, cell_size, cell_size))
+            elif cell == 'E':
+                pygame.draw.rect(window, BLUE, (x * cell_size, y * cell_size, cell_size, cell_size))
+            elif cell == '.':
+                pygame.draw.rect(window, WHITE, (x * cell_size, y * cell_size, cell_size, cell_size))
+
+def draw_path(path):
+    for row, col in path:
+        pygame.draw.rect(window, YELLOW, (col * cell_size, row * cell_size, cell_size, cell_size))
+
+def main():
+    pygame.init()
+    window = pygame.display.set_mode((window_width, window_height))
+    pygame.display.set_caption('Labirinto')
+
+    # Escolha da matriz
+    m = create_menu()
+    if m is None:
+        return  # Encerra o programa se nenhuma matriz for escolhida
+
+    start_row, start_col, end_row, end_col = find_start_and_end(m)
+
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+        window.fill(WHITE)
+        draw_maze(window, m)
+        
+        path = bfs(start_row, start_col, end_row, end_col)
+        if len(path) > 0:
+            draw_path(window, path)
+        
+        pygame.display.update()
+
+    pygame.quit()
+
+if __name__ == "__main__":
+    main()
+    
