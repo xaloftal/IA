@@ -12,7 +12,7 @@ def create_menu():
         m_random = A
         return m_random
     elif choice == '2':
-        m_fix = (matriz1025, matriz1030, matriz2525, matriz2530)
+        m_fix = (matriz1025, matriz1030, matriz2525, matriz2530) ###resolver
         return m_fix
         pass
     else:
