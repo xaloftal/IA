@@ -1,68 +1,77 @@
 from matrizes import *
 import heapq
+import pygame
+import sys
+import time
 
 class Node:
-    def __init__(self, x, y, parent=None, g=0, h=0):
-        """
-        Initialize a Node with its position, parent node, cost from the start, and heuristic cost.
+    def __init__(self, x, y, parent=None, g=0, h=0): # inicializa o no com as suas coordenadas, o no parente, o custo do inicio ate este no e o custo heuristico(custo do no ate ao objetivo)
 
-        :param x: X-coordinate of the node.
-        :param y: Y-coordinate of the node.
-        :param parent: Parent node.
-        :param g: Cost from the start node to this node.
-        :param h: Heuristic (estimated) cost from this node to the goal.
-        """
-        self.x = x
-        self.y = y
-        self.parent = parent
-        self.g = g  # Cost from the start node to this node
-        self.h = h  # Heuristic (estimated) cost from this node to the goal
+        self.x = x # coordenada x do nó
+        self.y = y # coordenada y do nó
+        self.parent = parent # no parente
+        self.g = g  # custo do inicio ate este no
+        self.h = h  # heuristico (estimado) deste no ate ao objetivo
 
-    def f(self):
-        """
-        Calculate the total cost f, which is the sum of g and h.
+    def total_cost(self): # retorna a soma de g (custo do inicio ate este no) e h (heuristico (estimado) deste no ate ao objetivo)
 
-        :return: Total cost f.
-        """
         return self.g + self.h
 
-    def __lt__(self, other):
-        """
-        Compare two nodes based on their total costs (f values).
+    def __lt__(self, other): #compara dois nos baseados no seu custo total
 
-        :param other: Another node for comparison.
-        :return: True if this node has a lower total cost (f value) than the other.
-        """
-        return self.f() < other.f()
+        # o objeto other e o outro no
+        # retorna TRUE se este no tiver um custo total inferior ao outro no
 
-def astar(matrix, start, goal):
-    """
-    Perform the A* search algorithm to find the shortest path in a matrix from the start point to the goal point.
+        return self.total_cost() < other.total_cost()
 
-    :param matrix: 2D grid representing the environment with 0 as walkable and 1 as obstacles.
-    :param start: Start point (x, y) coordinates.
-    :param goal: Goal point (x, y) coordinates.
-    :return: A list of (x, y) coordinates representing the path from start to goal, or None if no path is found.
-    """
-    open_set = []   # Nodes to be evaluated
-    closed_set = set()  # Already evaluated nodes
+def heuristic(point, goal): # calcula e retorna o custo heuristico (estimado) de uma certa coordenada até ao objetivo (distância de Manhattan)
 
-    start_node = Node(start[0], start[1], None, 0, heuristic(start, goal))
+    # point representa as coordenadas atuais; goal representa as coordenadas do objetivo
+
+    return abs(point[0] - goal[0]) + abs(point[1] - goal[1])
+
+def get_neighbors(matrix, node): # retorna a lista de nos vizinhos que podem ser atingidos pelo no atual
+
+    # matrix representa a matriz; node representa o no atual
+
+    neighbors = []
+    x, y = node.x, node.y
+
+    for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+        new_x, new_y = x + dx, y + dy
+        if 0 <= new_x < len(matrix) and 0 <= new_y < len(matrix[0]) and matrix[new_x][new_y] != 1:
+            neighbors.append(Node(new_x, new_y))
+    return neighbors
+
+def construct_path(goal): # retorna o caminho encontrado
+
+    path = []
+    while goal:
+        path.append((goal.x, goal.y))
+        goal = goal.parent
+    return path[::-1]  # reverte o caminho, para listar as coordenadas do start ate ao goal
+
+def astar(matrix, start, goal): # realiza o algoritmo A* para encontrar o caminho mais curto; retorna a lista de coordenadas que representam o caminho ou nada se não houver caminho
+
+    open_set = []   # numero de nos a serem avaliados
+    closed_set = set()  # nos ja avaliados
+
+    start_node = Node(start[0], start[1], None, 0, heuristic(start, goal)) 
     heapq.heappush(open_set, start_node)
 
     while open_set:
         current_node = heapq.heappop(open_set)
 
         if (current_node.x, current_node.y) == goal:
-            return construct_path(current_node)  # If the goal is reached, return the path.
+            return construct_path(current_node)  # se o objetivo for atingido, retorna o caminho
 
-        closed_set.add((current_node.x, current_node.y))  # Mark the current node as evaluated.
+        closed_set.add((current_node.x, current_node.y))  # marca o no atual como avaliado
 
         for neighbor in get_neighbors(matrix, current_node):
             if (neighbor.x, neighbor.y) in closed_set:
-                continue  # Skip nodes already evaluated.
+                continue  # salta nos ja avaliados.
 
-            tentative_g = current_node.g + 1  # Assuming a cost of 1 to move to a neighbor.
+            tentative_g = current_node.g + 1  # assumo o custo de um a ir para um vizinho.
 
             if neighbor not in open_set or tentative_g < neighbor.g:
                 neighbor.g = tentative_g
@@ -72,54 +81,68 @@ def astar(matrix, start, goal):
                 if neighbor not in open_set:
                     heapq.heappush(open_set, neighbor)
 
-    return None  # No path found
+    return None  # nenhum caminho encontrado
 
-def heuristic(point, goal):
-    """
-    Calculate the heuristic (estimated) cost from a point to the goal using the Manhattan distance.
+# Pygame initialization
+pygame.init()
 
-    :param point: Current point (x, y) coordinates.
-    :param goal: Goal point (x, y) coordinates.
-    :return: Heuristic cost.
-    """
-    return abs(point[0] - goal[0]) + abs(point[1] - goal[1])
+# Colors
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
 
-def get_neighbors(matrix, node):
-    """
-    Get neighboring nodes that can be reached from the current node.
+# Cell size
+CELL_SIZE = 20
 
-    :param matrix: 2D grid representing the environment.
-    :param node: Current node.
-    :return: List of neighboring nodes.
-    """
-    neighbors = []
-    x, y = node.x, node.y
-    for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
-        new_x, new_y = x + dx, y + dy
-        if 0 <= new_x < len(matrix) and 0 <= new_y < len(matrix[0]) and matrix[new_x][new_y] != 1:
-            neighbors.append(Node(new_x, new_y))
-    return neighbors
+def draw_grid(matrix, screen):
+    for row in range(len(matrix)):
+        for col in range(len(matrix[0])):
+            color = WHITE if matrix[row][col] == 0 else BLACK
+            pygame.draw.rect(screen, color, (col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE), 0)
 
-def construct_path(node):
-    """
-    Reconstruct the path from the goal node to the start node.
+def draw_path(path, screen):
+    for node in path:
+        pygame.draw.rect(screen, GREEN, (node[1] * CELL_SIZE, node[0] * CELL_SIZE, CELL_SIZE, CELL_SIZE), 0)
+        pygame.display.update()
+        time.sleep(0.2)
 
-    :param node: Goal node.
-    :return: List of (x, y) coordinates representing the path from start to goal.
-    """
-    path = []
-    while node:
-        path.append((node.x, node.y))
-        node = node.parent
-    return path[::-1]  # Reverse the path to get it from start to goal.
+def main():
+    matrix = [
+        [0, 0, 0, 0, 0],
+        [0, 1, 1, 0, 0],
+        [0, 0, 0, 0, 1],
+        [0, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0]
+    ]
+    
+    start = (0, 0)
+    goal = (4, 4)
 
-# Example usage
+    screen_size = (len(matrix[0]) * CELL_SIZE, len(matrix) * CELL_SIZE)
+    screen = pygame.display.set_mode(screen_size)
+    pygame.display.set_caption("A* Algorithm Visualization")
 
-start = (0, 0)
-goal = (4, 4)
+    running = True
 
-path = astar(matriz2525, start, goal)
-if path:
-    print("Path found:", path)
-else:
-    print("No path found")
+    # A* algorithm
+    path = astar(matrix, start, goal)
+    if path:
+        print("Path found:", path)
+
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+
+            screen.fill(WHITE)
+            draw_grid(matrix, screen)
+            draw_path(path, screen)
+
+            pygame.display.flip()  # Update the display
+
+        pygame.quit()
+        sys.exit()
+
+if __name__ == "__main__":
+    main()
