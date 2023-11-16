@@ -1,4 +1,4 @@
-from matrizes import *
+from fixedMatrices import *
 import heapq
 import pygame
 import sys
@@ -128,7 +128,7 @@ def main():
     # A* algorithm
     path = astar(matrix, start, goal)
     if path:
-        print("Path found:", path)
+        print("Caminho encontrado:", path)
 
         while running:
             for event in pygame.event.get():
@@ -143,6 +143,8 @@ def main():
 
         pygame.quit()
         sys.exit()
+    else:
+        print("Caminho não encontrado")
 
 if __name__ == "__main__":
     main()
