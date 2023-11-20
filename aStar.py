@@ -1,8 +1,10 @@
+
 from fixedMatrices import *
 import heapq
 import pygame
 import sys
 import time
+
 
 class Node:
     def __init__(self, x, y, parent=None, g=0, h=0): # inicializa o no com as suas coordenadas, o no parente, o custo do inicio ate este no e o custo heuristico(custo do no ate ao objetivo)
@@ -102,10 +104,17 @@ def main():
 
     running = True
 
+
+    # A* algorithm
+    path = astar(matrix, start, goal)
+    if path:
+        print("Path found:", path)
+
     # A* algorithm
     path = astar(matrix, start, goal)
     if path:
         print("Caminho encontrado:", path)
+
 
         while running:
             for event in pygame.event.get():
@@ -120,8 +129,12 @@ def main():
 
         pygame.quit()
         sys.exit()
+
+        pygame.quit()
+        sys.exit()
     else:
         print("Caminho não encontrado")
+
 
 if __name__ == "__main__":
     main()
