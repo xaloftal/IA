@@ -1,3 +1,3 @@
-from matrizes import *
+# from matrizes import *
 
-print(matriz2525)
+# print(matriz2525)
