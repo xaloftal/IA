@@ -1,3 +1,3 @@
-from matrizes import *
+from fixedMatrices import *
 
-print(matriz2525)
+print(matrix2530)
