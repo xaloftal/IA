@@ -1,24 +1,7 @@
 from fixedMatrices import *
 from randomMatrices import *
 import pygame
-
-def create_menu():
-    print("Quer gerar uma matriz aleatória ou fixa?")
-    print("1. Aleatória")
-    print("2. Fixa")
-    choice = input("Opção:")
-    
-    if choice == '1':
-        m_random = A
-        return m_random
-    elif choice == '2':
-        m_fix = (matrix1030, matrix2530) ###resolver
-        return m_fix
-        pass
-    else:
-        print("Opção Inválida!")
-    
-        
+       
 def solve(start_row, start_col):
     q = []
     q.append((start_row, start_col))
@@ -165,21 +148,20 @@ def main():
 
     start_row, start_col, end_row, end_col = find_start_and_end(m)
 
-    
-    
-    for event in pygame.event.get():
-        running = True
-        if event.type == pygame.QUIT:
-            running = False
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
 
-    window.fill(WHITE)
-    draw_maze(window, m)
-    
-    path = bfs(start_row, start_col, end_row, end_col)
-    if len(path) > 0:
-        draw_path(window, path)
-    
-    pygame.display.update()
+        window.fill(WHITE)
+        draw_maze(window, m)
+        
+        path = bfs(start_row, start_col, end_row, end_col)
+        if len(path) > 0:
+            draw_path(window, path)
+        
+        pygame.display.update()
 
     pygame.quit()
 
