@@ -94,34 +94,11 @@ GREEN = (0, 255, 0)
 
 # Cell size
 CELL_SIZE = 20
-
-def draw_grid(matrix, screen):
-    for row in range(len(matrix)):
-        for col in range(len(matrix[0])):
-            color = WHITE if matrix[row][col] == 0 else BLACK
-            pygame.draw.rect(screen, color, (col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE), 0)
-
-def draw_path(path, screen):
-    for node in path:
-        pygame.draw.rect(screen, GREEN, (node[1] * CELL_SIZE, node[0] * CELL_SIZE, CELL_SIZE, CELL_SIZE), 0)
-        pygame.display.update()
-        time.sleep(0.2)
-
 def main():
-    matrix = [
-        [0, 0, 0, 0, 0],
-        [0, 1, 1, 0, 0],
-        [0, 0, 0, 0, 1],
-        [0, 1, 1, 1, 0],
-        [0, 0, 0, 0, 0]
-    ]
-    
-    start = (0, 0)
-    goal = (4, 4)
 
     screen_size = (len(matrix[0]) * CELL_SIZE, len(matrix) * CELL_SIZE)
     screen = pygame.display.set_mode(screen_size)
-    pygame.display.set_caption("A* Algorithm Visualization")
+    pygame.display.set_caption("Algoritmo A*")
 
     running = True
 
