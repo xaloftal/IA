@@ -34,14 +34,14 @@ class MazeVisualizer:
               if self.maze[row][col] == 1:
                   color = BLACK
               elif (row, col) == current_cell:
-                  color = RED
+                  color = GREEN
               elif (row, col) == end_cell:
                   color = PURPLE
               elif (row, col) in verified_path:
                   color = RED
               elif path and (row, col) in path:
                   if (row, col) != start_cell and (row, col) != end_cell:
-                      color = GREEN
+                      color = RED
               pygame.draw.rect(self.screen, color, (col * self.cell_width, row * self.cell_height, self.cell_width, self.cell_height))
 
       pygame.display.flip()
