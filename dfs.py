@@ -1,97 +1,76 @@
 from fixedMatrices import *
 
-class Frontier:
-    def __init__(self):
-        self.frontier = []
+def dfs(start_row, start_col, end_row, end_col, maze, rows, cols):
+    stackFrontier = [(start_row, start_col)]
+    
+    visited = [[False for _ in range(cols)] for _ in range(rows)]
+    visited[start_row][start_col] = True
 
-    def add(self, node, parent):
-        self.frontier.append((node, parent))
+    prev = [[None for _ in range(cols)] for _ in range(rows)]
 
-    def contains_state(self, state):
-        return any(node == state for node, _ in self.frontier)
+    while stackFrontier:
+        row, col = stackFrontier.pop()
 
-    def empty(self):
-        return len(self.frontier) == 0
+        if (row, col) == (end_row, end_col):
+            return prev
 
-    def remove(self):
-        if self.empty():
-            raise Exception("empty frontier")
-        else:
-            node, parent = self.frontier[-1]
-            self.frontier = self.frontier[:-1]
-            return node, parent
+        # Verificar vizinhos
+        for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+            next_row, next_col = row + dr, col + dc
 
-def solve_maze_dfs(maze, start, end):
-    frontier = Frontier()  # Use the Frontier class instead of a stack
-    visited = set()  # Use a set to keep track of visited nodes.
-    search_tree = {}  # A dictionary to represent the search tree.
+            if (
+                0 <= next_row < rows and
+                0 <= next_col < cols and
+                not visited[next_row][next_col] and
+                maze[next_row][next_col] != '0'
+            ):
+                stackFrontier.append((next_row, next_col))
+                visited[next_row][next_col] = True
+                prev[next_row][next_col] = (row, col)
 
-    # Initialize the frontier with the start node.
-    frontier.add(start, None)
+    return None
 
-    while not frontier.empty():
-        current_node, parent = frontier.remove()
-
-        if current_node == end:
-            return reconstruct_path(search_tree, start, end)
-
-        if current_node in visited:
-            continue
-
-        visited.add(current_node)
-        search_tree[current_node] = parent  # Update search tree with the parent of the current node
-
-        neighbors = get_neighbors(maze, current_node)
-
-        for neighbor in neighbors:
-            if neighbor not in visited and not frontier.contains_state(neighbor):
-                frontier.add(neighbor, current_node)
-
-    return None  # If no path is found.
-
-
-# ir buscar os vizinhos
-def get_neighbors(maze, node):
-    neighbors = []
-    x, y = node
-
-    for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
-        new_x, new_y = x + dx, y + dy
-        if 0 <= new_x < len(maze) and 0 <= new_y < len(maze[0]) and maze[new_x][new_y] != '1':
-            neighbors.append((new_x, new_y))
-
-    return neighbors
-
-
-#reconstruir o caminho
-def reconstruct_path(search_tree, start, end):
-    path = [end]
-    current_node = end
-
-    while current_node != start:
-        current_node = search_tree[current_node]
-        path.append(current_node)
-
-    return list(path)
-
+def reconstructPath(start_row, start_col, end_row, end_col, prev):
+    path = []
+    row, col = end_row, end_col
+    while (row, col) != (start_row, start_col):
+        path.append((row, col))
+        row, col = prev[row][col]
+    path.append((start_row, start_col))
+    return path[::-1]
 
 # matriz a utilizar neste exemplo
 maze = matrix2530
 
 # onde o robot inicia
-start = (0, 0)
+start_row, start_col = 0, 0
 
 # onde esta o objeto
-end = (1, 2)
+end_row, end_col = 2, 2
 
-path = solve_maze_dfs(maze, start, end)
-if path:
-    print("Maze solved! Path:")
-    for node in path:
-        print(node)
-else:
-    print("Maze cannot be solved.")
+rows = len(maze)
+cols = len(maze[0])
 
-if __name__ == '__main__':
-    solve_maze_dfs(maze, start, end)
-    pass
+for i in range(rows):
+    for j in range(cols):
+        # robot
+        if maze[i][j] == 'R':
+            start_row, start_col = i, j
+        # produto
+        if maze[i][j] == 'P':
+            end_row, end_col = i, j
+            
+path = dfs(start_row, start_col, end_row, end_col, maze, rows, cols)
+
+def find_path(start_row, start_col, end_row, end_col, maze, rows, cols):
+    prev = dfs(start_row, start_col, end_row, end_col, maze, rows, cols)
+    if prev is None:
+        print("Caminho não encontrado.")
+        return []
+    return reconstructPath(start_row, start_col, end_row, end_col, prev)
+
+if __name__ == "__main__":
+    path = find_path(start_row, start_col, end_row, end_col, maze, rows, cols)
+    
+    print(path)
+    
