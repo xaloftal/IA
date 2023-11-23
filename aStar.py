@@ -40,7 +40,7 @@ def get_neighbors(matrix, node): # retorna a lista de nos vizinhos que podem ser
     x, y = node.x, node.y
 
     for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
-        new_x, new_y = x + dx, y + dy
+        new_x, new_y = x + dx, y + dy #vetor
         if 0 <= new_x < len(matrix) and 0 <= new_y < len(matrix[0]) and matrix[new_x][new_y] != 1:
             neighbors.append(Node(new_x, new_y))
     return neighbors
@@ -85,10 +85,11 @@ def astar(matrix, start, goal): # realiza o algoritmo A* para encontrar o caminh
 
     return None  # nenhum caminho encontrado
 
-# Pygame initialization
-pygame.init()
+#
+#PYGAME
+#
 
-# Colors
+# Cores
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
@@ -97,67 +98,42 @@ GREEN = (0, 255, 0)
 # Cell size
 CELL_SIZE = 20
 
-def draw_grid(matrix, screen):
-    for row in range(len(matrix)):
-        for col in range(len(matrix[0])):
-            color = WHITE if matrix[row][col] == 0 else BLACK
-            pygame.draw.rect(screen, color, (col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE), 0)
+def draw_maze(window, matrix):
+    for y, row in enumerate(matrix):
+        for x, cell in enumerate(row):
+            if cell == '1':
+                pygame.draw.rect(window, BLACK, (x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE))
+            elif cell == '0':
+                pygame.draw.rect(window, WHITE, (x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE))
 
-def draw_path(path, screen):
-    for node in path:
-        pygame.draw.rect(screen, GREEN, (node[1] * CELL_SIZE, node[0] * CELL_SIZE, CELL_SIZE, CELL_SIZE), 0)
-        pygame.display.update()
-        time.sleep(0.2)
+def draw_path(path):
+    for row, col in path:
+        pygame.draw.rect(window, GREEN, (col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE))
 
-def main():
-    matrix = [
-        [0, 0, 0, 0, 0],
-        [0, 1, 1, 0, 0],
-        [0, 0, 0, 0, 1],
-        [0, 1, 1, 1, 0],
-        [0, 0, 0, 0, 0]
-    ]
-    
-    start = (0, 0)
-    goal = (4, 4)
+pygame.init()
 
-    screen_size = (len(matrix[0]) * CELL_SIZE, len(matrix) * CELL_SIZE)
-    screen = pygame.display.set_mode(screen_size)
-    pygame.display.set_caption("A* Algorithm Visualization")
+matrix = matrix1030
+start = (0, 0)
+goal = (10,30)
 
-    running = True
+window = pygame.display.set_mode(len(matrix) * CELL_SIZE, len(matrix[0]) * CELL_SIZE)
+pygame.display.set_caption("Algoritmo A*")
 
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
 
-    # A* algorithm
-    path = astar(matrix, start, goal)
-    if path:
-        print("Path found:", path)
-
-    # A* algorithm
-    path = astar(matrix, start, goal)
-    if path:
-        print("Caminho encontrado:", path)
+window.fill(WHITE)
+draw_maze(window, matrix)
 
 
-        while running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
 
-            screen.fill(WHITE)
-            draw_grid(matrix, screen)
-            draw_path(path, screen)
+path = astar(matrix, start, goal)
+if path:
+    print("Path found:", path)
+    draw_path(window, path)
+else:
+    print("Caminho não encontrado")
 
-            pygame.display.flip()  # Update the display
-
-        pygame.quit()
-        sys.exit()
-
-        pygame.quit()
-        sys.exit()
-    else:
-        print("Caminho não encontrado")
-
-
-if __name__ == "__main__":
-    main()
