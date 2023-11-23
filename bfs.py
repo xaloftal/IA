@@ -142,6 +142,6 @@ if __name__ == "__main__":
         pygame.display.flip()
 
         # Aguardar um curto período para visualização
-        pygame.time.delay(200)  # Delay in milliseconds
+        pygame.time.delay(300)  # Delay in milliseconds
 
 pygame.quit()
