@@ -2,19 +2,33 @@ from fixedMatrices import *
 from randomMatrices import *
 import pygame
 import sys
-       
-def bfs(start_row, start_col, end_row, end_col, m, rows, cols):
-    q = []
-    q.append((start_row, start_col))
-    visited = [[False for _ in range(cols)] for _ in range(rows)]
-    visited[start_row][start_col] = True
+import time
+ 
+ 
+class Node:
+    def __init__(self, x, y, parent=None, g=0, h=0): # inicializa o no com as suas coordenadas, o no parente, o custo do inicio ate este no e o custo heuristico(custo do no ate ao objetivo)
 
+        self.x = x # coordenada x do nó
+        self.y = y # coordenada y do nó
+        self.parent = parent # no parente
+ 
+    
+def draw_evaluated(node, screen):
+    pygame.draw.rect(screen, RED, (node.y * CELL_SIZE, node.x * CELL_SIZE, CELL_SIZE, CELL_SIZE))
+    pygame.display.update()
+    pygame.time.delay(50)    
+       
+def bfs(matrix, start, goal, rows, cols, screen):
+    q = []
+    q.append((start))
+    visited = set()
+    start = True
     prev = [[None for _ in range(cols)] for _ in range(rows)]
 
     while q:
         row, col = q.pop(0)
 
-        if (row, col) == (end_row, end_col):
+        if (row, col) == (goal):
             return prev
 
         # Verificar vizinhos
@@ -25,66 +39,34 @@ def bfs(start_row, start_col, end_row, end_col, m, rows, cols):
                 0 <= next_row < rows and
                 0 <= next_col < cols and
                 not visited[next_row][next_col] and
-                m[next_row][next_col] != '0'
+                matrix[next_row][next_col] != '0'
             ):
                 q.append((next_row, next_col))
                 visited[next_row][next_col] = True
+                draw_evaluated(visited, screen)
                 prev[next_row][next_col] = (row, col)
 
     return None
 
-def reconstructPath(start_row, start_col, end_row, end_col, prev):
+def reconstructPath(start, goal, prev):
     path = []
-    row, col = end_row, end_col
-    while (row, col) != (start_row, start_col):
+    row, col = goal
+    while (row, col) != (start[0], start[1]):
         path.append((row, col))
         row, col = prev[row][col]
-    path.append((start_row, start_col))
+    path.append(start)
     path.reverse()
     return path
 
-m = matrix2530
 
-rows = len(m)
-cols = len(m[0])
-start_row, start_col, end_row, end_col = 0, 0, 0, 0
+def draw_grid(matrix, screen):
+    for row in range(len(matrix)):
+        for col in range(len(matrix[0])):
+            if matrix[row][col] == 1:
+                pygame.draw.rect(screen, BLACK, (col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE))
+            elif matrix[row][col] == 0:
+                pygame.draw.rect(screen, WHITE, (col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE))
 
-for i in range(rows):
-    for j in range(cols):
-        if m[i][j] == 'R':
-            start_row, start_col = i, j
-        if m[i][j] == 'P':
-            end_row, end_col = i, j
-
-print("Labirinto:")
-for row in m:
-    print('0'.join(map(str, row)))
-
-
-print("\nBuscando um caminho:")
-
-# Exemplo de uso
-path = bfs(start_row, start_col, end_row, end_col, m, rows, cols)
-
-def find_path(start_row, start_col, end_row, end_col, m, rows, cols):
-    prev = bfs(start_row, start_col, end_row, end_col, m, rows, cols)
-    if prev is None:
-        print("Caminho não encontrado.")
-        return []
-    return reconstructPath(start_row, start_col, end_row, end_col, prev)
-
-def draw_maze(screen, m, rows, cols):
-    for i in range(rows):
-        for j in range(cols):
-            rect = pygame.Rect(j * CELL_SIZE, i * CELL_SIZE, CELL_SIZE, CELL_SIZE)
-            if m[i][j] == '0':
-                pygame.draw.rect(screen, BLACK, rect)
-            elif m[i][j] == 'R':
-                pygame.draw.rect(screen, BLUE, rect)
-            elif m[i][j] == 'P':
-                pygame.draw.rect(screen, YELLOW, rect)
-            elif m[i][j] == 'E':
-                pygame.draw.rect(screen, GREEN, rect)
 
 def draw_path(screen, path_matrix, rows, cols):
     for i in range(rows):
@@ -92,6 +74,7 @@ def draw_path(screen, path_matrix, rows, cols):
             if path_matrix[i][j] == 'P':
                 rect = pygame.Rect(j * CELL_SIZE, i * CELL_SIZE, CELL_SIZE, CELL_SIZE)
                 pygame.draw.rect(screen, GREEN, rect)
+                
 
 if __name__ == "__main__":
 
@@ -102,46 +85,39 @@ if __name__ == "__main__":
     YELLOW = (255, 255, 0)
     WHITE = (255, 255, 255)
     GREEN = (0, 255, 0)
-    BLACK = (0, 0, 0)
+    RED = (255, 0, 0)
     BLUE = (0, 0, 255)
+    BLACK = (0, 0, 0)
 
     # Tamanho da tela e célula
-    CELL_SIZE = 30
-    WINDOW_SIZE = (cols * CELL_SIZE, rows * CELL_SIZE)
+    CELL_SIZE = 20
 
-    # Configuração da tela
-    screen = pygame.display.set_mode(WINDOW_SIZE)
-    pygame.display.set_caption('Labirinto com Pygame')
+    matrix = A
+    start = (0,0)
+    goal = (4,4)
 
-    # Criar uma matriz para representar o caminho sem modificar a matriz original
-    path_matrix = [[' ' for _ in range(cols)] for _ in range(rows)]
+    # Define the start and goal positions
 
-    # Loop principal
-    while True:
+    # Create the Pygame screen
+    width, height = len(matrix[0]) * CELL_SIZE, len(matrix) * CELL_SIZE
+    screen = pygame.display.set_mode((width, height))
+    pygame.display.set_caption("Breath-Search Pathfinding Visualization")
+
+    # Main loop
+    running = True
+    draw_grid(matrix, screen)
+    path, screen = bfs(matrix, start, goal, len(matrix[0]), len(matrix), screen)
+
+    if path:
+        print("Caminho encontrado:", path)
+        draw_path(path, screen)
+    else:
+        print("Caminho não encontrado")
+
+    while running:
+    
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+                running = False
 
-        # Limpar a tela
-        screen.fill(WHITE)
-
-        # Encontrar o caminho
-        path = find_path(start_row, start_col, end_row, end_col, m, rows, cols)
-
-        # Desenhar o labirinto
-        draw_maze(screen, m, rows, cols)
-
-        # Se o caminho foi encontrado, desenhar o caminho sem modificar a matriz original
-        if path:
-            for row, col in path:
-                path_matrix[row][col] = 'P'  # 'P' represents the path step
-            draw_path(screen, path_matrix, rows, cols)
-
-        # Atualizar a tela
-        pygame.display.flip()
-
-        # Aguardar um curto período para visualização
-        pygame.time.delay(300)  # Delay in milliseconds
-
-pygame.quit()
+    pygame.quit()
