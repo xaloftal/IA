@@ -10,10 +10,9 @@ def show_menu():
     print("2. Which search algorithm do you want to try?")
     print("3. Exit")
 
-def get_size():
-    size = int(input("Enter the size of matrix: "))
-    return size
-
+def get_size(dimensao):
+    return int(input("Enter the {dimensao} of matrix: "))
+  
 def choice1():
     matrix_type = input("\n1.Random\n2.Fixed\nChoose matrix type: ")
     
