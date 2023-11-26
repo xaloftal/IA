@@ -1,4 +1,5 @@
 from collections import deque
+import time
 from fixedMatrices import *
 
 # verifica se coordenada é valida
@@ -47,11 +48,14 @@ matrix = matrix2530
 start = (0, 0)
 end = (9, 2)
 
-path = dfs(matrix, start, end)
+if __name__ == "__main__":
+    timerS = time.time()
+    path = dfs(matrix, start, end)
 
-if path:
-    print("Caminho encontrado:")
-    for point in path:
-        print(point)
-else:
-    print("Não foi possível encontrar um caminho.")
+    if path:
+        timerE = time.time()
+        print("Caminho encontrado em" + str(timerE - timerS) + ":")
+        for point in path:
+            print(point)
+    else:
+        print("Não foi possível encontrar um caminho.")
