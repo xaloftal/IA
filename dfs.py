@@ -7,16 +7,18 @@ def validCoordinates(x, y, matrix):
     rows, cols = len(matrix), len(matrix[0])
     return 0 <= x < rows and 0 <= y < cols and matrix[x][y] == 0
 
-def dfs(matrix, inicio, fim):
+# algotitmo pesquisa em profundidade
+def dfs(matrix, start, end):
     rows, cols = len(matrix), len(matrix[0])
     visited = [[False] * cols for _ in range(rows)]
-    parents = {}  # Fiz um dicionário para guardar os pais de cada ponto
-    stackFrontier = deque([(inicio, None)])  # aqui a gente guarda o ponto e o pai dele
+    parents = {}  # dicionário para guardar os pais de cada ponto
+    stackFrontier = deque([(start, None)])  # aqui a gente guarda o ponto e o pai dele
 
     while stackFrontier:
         (x, y), parent = stackFrontier.popleft()
 
-        if (x, y) == fim:
+        # se chegou ao objetivo
+        if (x, y) == end:
             # aqui a gente monta o caminho a partir do dicionário de pais
             path = []
             while (x, y) is not None:
@@ -27,6 +29,7 @@ def dfs(matrix, inicio, fim):
                     break
             return path
 
+        
         if not visited[x][y]:
             visited[x][y] = True
 
@@ -44,7 +47,6 @@ def dfs(matrix, inicio, fim):
 
 # matriz 
 matrix = matrix2530
-
 start = (0, 0)
 end = (9, 2)
 
