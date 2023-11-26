@@ -48,7 +48,7 @@ def dfs(matrix, start, end):
 # matriz 
 matrix = matrix2530
 start = (0, 0)
-end = (9, 2)
+end = (20, 17)
 
 if __name__ == "__main__":
     timerS = time.time()
@@ -56,7 +56,7 @@ if __name__ == "__main__":
 
     if path:
         timerE = time.time()
-        print("Caminho encontrado em" + str(timerE - timerS) + ":")
+        print("Caminho encontrado em " + str(timerE - timerS)+" ms" + ":")
         for point in path:
             print(point)
     else:
