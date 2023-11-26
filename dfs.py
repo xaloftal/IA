@@ -48,7 +48,7 @@ def dfs(matrix, start, end):
 # matriz 
 matrix = matrix2530
 start = (0, 0)
-end = (20, 17)
+end = (9, 2)
 
 if __name__ == "__main__":
     timerS = time.time()
