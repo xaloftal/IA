@@ -1,76 +1,57 @@
+from collections import deque
 from fixedMatrices import *
 
-def dfs(start_row, start_col, end_row, end_col, maze, rows, cols):
-    stackFrontier = [(start_row, start_col)]
-    
-    visited = [[False for _ in range(cols)] for _ in range(rows)]
-    visited[start_row][start_col] = True
+# verifica se coordenada é valida
+def validCoordinates(x, y, matrix):
+    rows, cols = len(matrix), len(matrix[0])
+    return 0 <= x < rows and 0 <= y < cols and matrix[x][y] == 0
 
-    prev = [[None for _ in range(cols)] for _ in range(rows)]
+def dfs(matrix, inicio, fim):
+    rows, cols = len(matrix), len(matrix[0])
+    visited = [[False] * cols for _ in range(rows)]
+    parents = {}  # Fiz um dicionário para guardar os pais de cada ponto
+    stackFrontier = deque([(inicio, None)])  # aqui a gente guarda o ponto e o pai dele
 
     while stackFrontier:
-        row, col = stackFrontier.pop()
+        (x, y), parent = stackFrontier.popleft()
 
-        if (row, col) == (end_row, end_col):
-            return prev
+        if (x, y) == fim:
+            # aqui a gente monta o caminho a partir do dicionário de pais
+            path = []
+            while (x, y) is not None:
+                path.insert(0, (x, y))
+                if (x, y) in parents:
+                    (x, y) = parents[(x, y)]
+                else:
+                    break
+            return path
 
-        # Verificar vizinhos
-        for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
-            next_row, next_col = row + dr, col + dc
+        if not visited[x][y]:
+            visited[x][y] = True
 
-            if (
-                0 <= next_row < rows and
-                0 <= next_col < cols and
-                not visited[next_row][next_col] and
-                maze[next_row][next_col] != '0'
-            ):
-                stackFrontier.append((next_row, next_col))
-                visited[next_row][next_col] = True
-                prev[next_row][next_col] = (row, col)
+            # aqui a gente gera os movimentos possíveis
+            moves = [(x-1, y), (x+1, y), (x, y-1), (x, y+1)]
 
+            for move in moves:
+                new_x, new_y = move
+                if validCoordinates(new_x, new_y, matrix) and not visited[new_x][new_y]:
+                    stackFrontier.append(((new_x, new_y), (x, y)))  # Atualiza o pai
+                    parents[(new_x, new_y)] = (x, y)
+
+    # Se não for possível atingir o objetivo
     return None
 
-def reconstructPath(start_row, start_col, end_row, end_col, prev):
-    path = []
-    row, col = end_row, end_col
-    while (row, col) != (start_row, start_col):
-        path.append((row, col))
-        row, col = prev[row][col]
-    path.append((start_row, start_col))
-    return path[::-1]
+# matriz 
+matrix = matrix2530
 
-# matriz a utilizar neste exemplo
-maze = matrix2530
+start = (0, 0)
+end = (9, 2)
 
-# onde o robot inicia
-start_row, start_col = 0, 0
+path = dfs(matrix, start, end)
 
-# onde esta o objeto
-end_row, end_col = 2, 2
-
-rows = len(maze)
-cols = len(maze[0])
-
-for i in range(rows):
-    for j in range(cols):
-        # robot
-        if maze[i][j] == 'R':
-            start_row, start_col = i, j
-        # produto
-        if maze[i][j] == 'P':
-            end_row, end_col = i, j
-            
-path = dfs(start_row, start_col, end_row, end_col, maze, rows, cols)
-
-def find_path(start_row, start_col, end_row, end_col, maze, rows, cols):
-    prev = dfs(start_row, start_col, end_row, end_col, maze, rows, cols)
-    if prev is None:
-        print("Caminho não encontrado.")
-        return []
-    return reconstructPath(start_row, start_col, end_row, end_col, prev)
-
-if __name__ == "__main__":
-    path = find_path(start_row, start_col, end_row, end_col, maze, rows, cols)
-    
-    print(path)
-    
+if path:
+    print("Caminho encontrado:")
+    for point in path:
+        print(point)
+else:
+    print("Não foi possível encontrar um caminho.")
