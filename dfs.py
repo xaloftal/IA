@@ -50,7 +50,7 @@ matrix = matrix2530
 start = (0, 0)
 end = (9, 2)
 
-if __name__ == "__main__":
+def dfs_path(matrix, start, end):
     timerS = time.time()
     path = dfs(matrix, start, end)
 

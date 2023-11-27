@@ -88,51 +88,13 @@ def astar(matrix, start, goal,screen): # realiza o algoritmo A* para encontrar o
 
     return None, screen  # nenhum caminho encontrado
 
-#
-#PYGAME
-#
-CELL_SIZE = 20
+def astar_path(matrix, start, end):
+    timerS = time.time()
+    path = astar(matrix, start, end)
 
-matrix = A
-
-# Define the start and goal positions
-start = (0, 0)
-goal = (10,10)
-
-# Create the Pygame screen
-width, height = len(matrix[0]) * CELL_SIZE, len(matrix) * CELL_SIZE
-screen = pygame.display.set_mode((width, height))
-pygame.display.set_caption("Algoritmo A*")
-
-def draw_grid(matrix, screen):
-    for row in range(len(matrix)):
-        for col in range(len(matrix[0])):
-            if matrix[row][col] == 1:
-                pygame.draw.rect(screen, BLACK, (col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE))
-            elif matrix[row][col] == 0:
-                pygame.draw.rect(screen, WHITE, (col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE))
-
-def draw_path(path, screen):
-    for x, y in path:
-        pygame.draw.rect(screen, GREEN, (y * CELL_SIZE, x * CELL_SIZE, CELL_SIZE, CELL_SIZE))
-        pygame.display.update()
-        pygame.time.delay(10)
-
-# Main loop
-running = True
-draw_grid(matrix, screen)
-path, screen = astar(matrix, start, goal, screen)
-
-if path:
-    print("Caminho encontrado:", path)
-    draw_path(path, screen)
-else:
-    print("Caminho não encontrado")
-
-while running:
-   
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-
-pygame.quit()
+    if path:
+        timerE = time.time()
+        print("Caminho encontrado em " + str(timerE - timerS)+" ms" + ":")
+        print(path)
+    else:
+        print("Não foi possível encontrar um caminho.")
