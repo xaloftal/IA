@@ -2,6 +2,7 @@ import time
 from bfs import validCoordinates
 from collections import deque
 from fixedMatrices import *
+from pygame_test import *
 
 # algotitmo pesquisa em profundidade
 def dfs(matrix, start, end):
@@ -46,7 +47,7 @@ matrix = matrix2530
 start = (0, 0)
 end = (9, 2)
 
-if __name__ == "__main__":
+def dfs_path(matrix, start, end):
     timerS = time.time()
     path = dfs(matrix, start, end)
 
@@ -57,3 +58,24 @@ if __name__ == "__main__":
             print(point)
     else:
         print("Não foi possível encontrar um caminho.")
+
+def dfs_visualization(matrix, start, goal):
+    running = True
+    draw_screen(matrix)
+    draw_grid(matrix, screen)
+
+    path, screen = solve_maze_dfs(matrix, start, goal, screen)
+    
+    if path:
+        print("Caminho encontrado:", path)
+        draw_path(path, screen)
+    else:
+        print("Caminho não encontrado")
+
+    while running:
+    
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+    pygame.quit()
