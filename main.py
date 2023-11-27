@@ -1,66 +1,118 @@
-import randomMatrices
-import fixedMatrices
-import bfs
-import dfs
-import aStar
+from fixedMatrices import *
+from bfs import *
+from dfs import *
+from aStar import *
 
 def show_menu():
     print("MENU:")
-    print("1. What type of matrix do you want?")
-    print("2. Which search algorithm do you want to try?")
-    print("3. Exit")
+    print("1. Benchmark")
+    print("2. Visualização gráfica")
+    print("3. Sair")
 
-def get_size(dimensao):
-    return int(input("Enter the {dimensao} of matrix: "))
-  
-def choice1():
-    matrix_type = input("\n1.Random\n2.Fixed\nChoose matrix type: ")
+    choice_menu = input("\nEscolha uma opção: ")
+
+    return choice_menu
+
+def show_submenu():
+    print("MENU:")
+    print("1. Algoritmo de pesquisa em largura")
+    print("2. Algoritmo de pesquisa em profundidade")
+    print("3. A estrela")
+    print("4. Voltar")
+
+    choice_submenu = input("\nEscolha uma opção: ")
+
+    return choice_submenu
     
-    if matrix_type == '1':
-        size = get_size()
-        matrix = randomMatrices()
-        return matrix
-    elif matrix_type == '2':
-        size = get_size()
-        matrix = fixedMatrices()
-        return matrix
-    else:
-        print("Invalid choice for matrix type.")  
-        return None      
+def show_menu_matrices():
+    print("MENU:")
+    print("1. matriz 2530")
+    print("2. matriz 1010")
+    print("3. Voltar")
 
-def choice2():
-    algorithm_search = input("1.bfs\n2.dfs\n3.aStar\nChoose algorithm search: ")
-    if algorithm_search == '1':
-        search = bfs()
-        return search
-    elif algorithm_search == '2':
-        search = dfs()
-        return search
-    elif algorithm_search == '3':
-        search = aStar()
-        return search
-    else:
-        print("Invalid choice for matrix type.")  
-        return None    
-               
-# def opcao3():
-#     print("Você escolheu a Opção 3.")
+    choice_matrices = input("\nEscolha uma opção: ")
 
-# Loop principal
-while True:
-    show_menu()
+    while True:
+        if choice_matrices == '1':
+            matrix = matrix2530
+        elif choice_matrices == '2':
+            matrix = matrix1030
+        elif choice_matrices == '3':
+            break
+        else:
+            print("Opção inválida. Tente novamente.")
 
-    escolha = input("\nEscolha uma opção: ")
+    return matrix
 
-    if escolha == '1':
-        choice1()
-    elif escolha == '2':
-        choice2()
-        
-    # elif escolha == '3':
-        
-    # elif escolha == '4':
-    #     print("Saindo do programa.")
-    #     break
-    else:
-        print("Opção inválida. Tente novamente.")
+def choose_start():
+    start_row = input("\nEscolha a linha do ponto incial: ")
+    start_col = input("\nEscolha a coluna do ponto incial: ")
+
+    return (start_row, start_col)
+
+
+def choose_goal():
+    goal_row = input("\nEscolha a linha do objetivo: ")
+    goal_col = input("\nEscolha a coluna do objetivo: ")
+
+    return (goal_row, goal_col)
+
+if __name__ == '__main__':
+    while True:
+        choice = show_menu()
+
+        ####Benchmark####
+        if choice == '1':
+           choice_submenu = show_submenu()
+
+           if choice_submenu == '1':
+                matrix = show_menu_matrices()
+                start = choose_start()
+                goal = choose_goal()
+                bfs_path(matrix, start, goal)
+
+           elif choice_submenu == '2':
+                matrix = show_menu_matrices()
+                start = choose_start()
+                goal = choose_goal()
+                dfs_path(matrix, start, goal)
+
+           elif choice_submenu == '3':
+                matrix = show_menu_matrices()
+                start = choose_start()
+                goal = choose_goal()
+                astar_path(matrix, start, goal)
+           else: 
+            print("Opção inválida. Tente novamente.")
+
+        ####Visualização gráfica####
+
+        elif choice == '2':
+            choice_submenu = show_submenu()
+            if choice_submenu == '1':
+                matrix = show_menu_matrices()
+                start = choose_start()
+                goal = choose_goal()
+                bfs_visualization()
+            elif choice_submenu == '2':
+                matrix = show_menu_matrices()
+                start = choose_start()
+                goal = choose_goal()
+                dfs_visualization()
+            elif choice_submenu == '3':
+                matrix = show_menu_matrices()
+                start = choose_start()
+                goal = choose_goal()
+                astar_visualization()
+            else: 
+                print("Opção inválida. Tente novamente.")
+
+        elif choice == '3':
+            break
+        else:
+            print("Opção inválida. Tente novamente.")
+
+
+    
+
+

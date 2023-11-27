@@ -1,6 +1,7 @@
 from collections import deque
 import time
 from fixedMatrices import *
+from pygame_test import *
 
 # verifica se coordenada é valida
 def validCoordinates(x, y, matrix):
@@ -49,7 +50,7 @@ matrix = matrix2530
 start = (0, 0)
 end = (9, 2)
 
-if __name__ == "__main__":
+def bfs_path(matrix, start, end):
     timerS = time.time()
     path = bfs(matrix, start, end)
 
@@ -60,3 +61,24 @@ if __name__ == "__main__":
             print(point)
     else:
         print("Não foi possível encontrar um caminho.")
+
+def bfs_visualization(matrix, start, goal):
+    running = True
+    draw_screen(matrix)
+    draw_grid(matrix, screen)
+
+    path, screen = bfs(matrix, start, goal, screen)
+    
+    if path:
+        print("Caminho encontrado:", path)
+        draw_path(path, screen)
+    else:
+        print("Caminho não encontrado")
+
+    while running:
+    
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+    pygame.quit()
