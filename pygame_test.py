@@ -2,9 +2,6 @@ import pygame
 import sys
 import time
 import heapq
-from dfs import *
-from bfs import *
-from aStar import *
 
 YELLOW = (255, 255, 0)
 WHITE = (255, 255, 255)
@@ -42,67 +39,6 @@ def draw_path(path, screen):
         pygame.display.update()
         pygame.time.delay(10)
 
-# Main loop
 
-def astar_visualization(matrix, start, goal):
-    running = True
-    draw_screen(matrix)
-    draw_grid(matrix, screen)
 
-    path, screen = astar(matrix, start, goal, screen)
-    
-    if path:
-        print("Caminho encontrado:", path)
-        draw_path(path, screen)
-    else:
-        print("Caminho não encontrado")
 
-    while running:
-    
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-
-    pygame.quit()
-
-def bfs_visualization(matrix, start, goal):
-    running = True
-    draw_screen(matrix)
-    draw_grid(matrix, screen)
-
-    path, screen = bfs(matrix, start, goal, screen)
-    
-    if path:
-        print("Caminho encontrado:", path)
-        draw_path(path, screen)
-    else:
-        print("Caminho não encontrado")
-
-    while running:
-    
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-
-    pygame.quit()
-
-def dfs_visualization(matrix, start, goal):
-    running = True
-    draw_screen(matrix)
-    draw_grid(matrix, screen)
-
-    path, screen = solve_maze_dfs(matrix, start, goal, screen)
-    
-    if path:
-        print("Caminho encontrado:", path)
-        draw_path(path, screen)
-    else:
-        print("Caminho não encontrado")
-
-    while running:
-    
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-
-    pygame.quit()

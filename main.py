@@ -1,7 +1,7 @@
 from fixedMatrices import *
 from bfs import *
 from dfs import *
-from aStar import astar_path
+from aStar import *
 
 def show_menu():
     print("MENU:")
@@ -50,6 +50,7 @@ def choose_start():
 
     return (start_row, start_col)
 
+
 def choose_goal():
     goal_row = input("\nEscolha a linha do objetivo: ")
     goal_col = input("\nEscolha a coluna do objetivo: ")
@@ -92,14 +93,17 @@ if __name__ == '__main__':
                 matrix = show_menu_matrices()
                 start = choose_start()
                 goal = choose_goal()
+                bfs_visualization()
             elif choice_submenu == '2':
                 matrix = show_menu_matrices()
                 start = choose_start()
                 goal = choose_goal()
+                dfs_visualization()
             elif choice_submenu == '3':
                 matrix = show_menu_matrices()
                 start = choose_start()
                 goal = choose_goal()
+                astar_visualization()
             else: 
                 print("Opção inválida. Tente novamente.")
 

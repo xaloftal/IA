@@ -1,11 +1,6 @@
-from fixedMatrices import *
 import heapq
-import pygame
-import sys
 import time
-from randomMatrices import *
 from pygame_test import *
-from main import *
 
 class Node:
     def __init__(self, x, y, parent=None, g=0, h=0): # inicializa o no com as suas coordenadas, o no parente, o custo do inicio ate este no e o custo heuristico(custo do no ate ao objetivo)
@@ -69,8 +64,7 @@ def astar(matrix, start, goal,screen): # realiza o algoritmo A* para encontrar o
             return construct_path(current_node), screen  # se o objetivo for atingido, retorna o caminho
 
         closed_set.add((current_node.x, current_node.y))  # marca o no atual como avaliado
-        if choice == '2':     #do menu
-            draw_evaluated(current_node, screen)
+        draw_evaluated(current_node, screen)
 
         for neighbor in get_neighbors(matrix, current_node):
             if (neighbor.x, neighbor.y) in closed_set:
@@ -88,9 +82,9 @@ def astar(matrix, start, goal,screen): # realiza o algoritmo A* para encontrar o
 
     return None, screen  # nenhum caminho encontrado
 
-def astar_path(matrix, start, end):
+def astar_path(matrix, start, goal):
     timerS = time.time()
-    path = astar(matrix, start, end)
+    path = astar(matrix, start, goal)
 
     if path:
         timerE = time.time()
@@ -98,3 +92,25 @@ def astar_path(matrix, start, end):
         print(path)
     else:
         print("Não foi possível encontrar um caminho.")
+
+
+def astar_visualization(matrix, start, goal):
+    running = True
+    draw_screen(matrix)
+    draw_grid(matrix, screen)
+
+    path, screen = astar(matrix, start, goal, screen)
+    
+    if path:
+        print("Caminho encontrado:", path)
+        draw_path(path, screen)
+    else:
+        print("Caminho não encontrado")
+
+    while running:
+    
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+    pygame.quit()
