@@ -1,94 +1,63 @@
+from collections import deque
+import time
 from fixedMatrices import *
 
-class Frontier:
-    def __init__(self):
-        self.frontier = []
+# verifica se coordenada é valida
+def validCoordinates(x, y, matrix):
+    rows, cols = len(matrix), len(matrix[0])
+    return 0 <= x < rows and 0 <= y < cols and matrix[x][y] == 0
 
-    def add(self, node, parent):
-        self.frontier.append((node, parent))
+# algotitmo pesquisa em profundidade
+def dfs(matrix, start, end):
+    rows, cols = len(matrix), len(matrix[0])
+    visited = [[False] * cols for _ in range(rows)]
+    parents = {}  # dicionário para guardar os pais de cada ponto
+    stackFrontier = deque([(start, None)])  # aqui a gente guarda o ponto e o pai dele
 
-    def contains_state(self, state):
-        return any(node == state for node, _ in self.frontier)
+    while stackFrontier:
+        (x, y), parent = stackFrontier.popleft()
 
-    def empty(self):
-        return len(self.frontier) == 0
+        # se chegou ao objetivo
+        if (x, y) == end:
+            # aqui a gente monta o caminho a partir do dicionário de pais
+            path = []
+            while (x, y) is not None:
+                path.insert(0, (x, y))
+                if (x, y) in parents:
+                    (x, y) = parents[(x, y)]
+                else:
+                    break
+            return path
 
-    def remove(self):
-        if self.empty():
-            raise Exception("empty frontier")
-        else:
-            node, parent = self.frontier[-1]
-            self.frontier = self.frontier[:-1]
-            return node, parent
+        
+        if not visited[x][y]:
+            visited[x][y] = True
 
-def solve_maze_dfs(maze, start, end):
-    frontier = Frontier()  # Use the Frontier class instead of a stack
-    visited = set()  # Use a set to keep track of visited nodes.
-    search_tree = {}  # A dictionary to represent the search tree.
+            # aqui a gente gera os movimentos possíveis
+            moves = [(x-1, y), (x+1, y), (x, y-1), (x, y+1)]
 
-    # Initialize the frontier with the start node.
-    frontier.add(start, None)
+            for move in moves:
+                new_x, new_y = move
+                if validCoordinates(new_x, new_y, matrix) and not visited[new_x][new_y]:
+                    stackFrontier.append(((new_x, new_y), (x, y)))  # Atualiza o pai
+                    parents[(new_x, new_y)] = (x, y)
 
-    while not frontier.empty():
-        current_node, parent = frontier.remove()
+    # Se não for possível atingir o objetivo
+    return None
 
-        if current_node == end:
-            return reconstruct_path(search_tree, start, end)
-
-        if current_node in visited:
-            continue
-
-        visited.add(current_node)
-        search_tree[current_node] = parent  # Update search tree with the parent of the current node
-
-        neighbors = get_neighbors(maze, current_node)
-
-        for neighbor in neighbors:
-            if neighbor not in visited and not frontier.contains_state(neighbor):
-                frontier.add(neighbor, current_node)
-
-    return None  # If no path is found.
-
-
-# ir buscar os vizinhos
-def get_neighbors(maze, node):
-    neighbors = []
-    x, y = node
-
-    for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
-        new_x, new_y = x + dx, y + dy
-        if 0 <= new_x < len(maze) and 0 <= new_y < len(maze[0]) and maze[new_x][new_y] != '1':
-            neighbors.append((new_x, new_y))
-
-    return neighbors
-
-
-#reconstruir o caminho
-def reconstruct_path(search_tree, start, end):
-    path = [end]
-    current_node = end
-
-    while current_node != start:
-        current_node = search_tree[current_node]
-        path.append(current_node)
-
-    return list(path)
-
-
-# matriz a utilizar neste exemplo
-maze = matrix2530
-
-# onde o robot inicia
+# matriz 
+matrix = matrix2530
 start = (0, 0)
+end = (9, 2)
 
-# onde esta o objeto
-end = (1, 2)
+if __name__ == "__main__":
+    timerS = time.time()
+    path = dfs(matrix, start, end)
 
-def dfs_path():
-    path = solve_maze_dfs(maze, start, end)
     if path:
-        print("Maze solved! Path:")
-        for node in path:
-            print(node)
+        timerE = time.time()
+        print("Caminho encontrado em " + str(timerE - timerS)+" ms" + ":")
+        for point in path:
+            print(point)
     else:
-        print("Maze cannot be solved.")
+        print("Não foi possível encontrar um caminho.")
