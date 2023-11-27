@@ -1,25 +1,21 @@
-from collections import deque
 import time
+from bfs import validCoordinates
+from collections import deque
 from fixedMatrices import *
-
-# verifica se coordenada é valida
-def validCoordinates(x, y, matrix):
-    rows, cols = len(matrix), len(matrix[0])
-    return 0 <= x < rows and 0 <= y < cols and matrix[x][y] == 0
 
 # algotitmo pesquisa em profundidade
 def dfs(matrix, start, end):
     rows, cols = len(matrix), len(matrix[0])
     visited = [[False] * cols for _ in range(rows)]
     parents = {}  # dicionário para guardar os pais de cada ponto
-    stackFrontier = deque([(start, None)])  # aqui a gente guarda o ponto e o pai dele
+    stackFrontier = deque([(start, None)])  # guardar o ponto e o pai dele
 
     while stackFrontier:
-        (x, y), parent = stackFrontier.popleft()
+        (x, y), parent = stackFrontier.pop() # elimina o ultimo elemento, o mais recente
 
         # se chegou ao objetivo
         if (x, y) == end:
-            # aqui a gente monta o caminho a partir do dicionário de pais
+            # montar o caminho a partir do dicionário de pais
             path = []
             while (x, y) is not None:
                 path.insert(0, (x, y))

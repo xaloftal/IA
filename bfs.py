@@ -55,7 +55,7 @@ if __name__ == "__main__":
 
     if path:
         timerE = time.time()
-        print("Caminho encontrado em", str(timerE - timerS) + ":")
+        print("Caminho encontrado em", str(timerE - timerS) + "ms:")
         for point in path:
             print(point)
     else:

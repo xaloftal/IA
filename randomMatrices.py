@@ -1,18 +1,15 @@
 import numpy as np
-import pandas as pd
-import xlsxwriter
+
+A = np.random.choice([0, 1], size=(50, 50), p=[0.7, 0.3])
+
+# Convert array elements to strings and join with commas
+matrix = np.array2string(A, separator=',', formatter={'int': lambda x: f'{x:,}'})
 
 
-#criar matriz aleatória com 0 e 1
-#A = np.random.randint(0, 2, (8, 8))
-#print(A)
-
-A = np.random.choice([0, 1], size = (10,10), p = [.7,.3])
-print(A)
-#escrever matriz em excel
-#df = pd.DataFrame(A).T
-#df.to_excel(excel_writer = "matriz.xlsx")
-
-#df = pd.read_excel("matriz.xlsx")
-#a = df.to_numpy()
-#print(a)
+with open('outputMatrix.txt', 'w') as file:
+    file.write('[')
+    for i, row in enumerate(A):
+        row_str = ', '.join(map(str, row))
+        file.write(f'[{row_str}]' + (', ' if i < len(A) - 1 else '') + '\n')
+    file.write(']')
+    
