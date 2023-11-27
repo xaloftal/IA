@@ -84,14 +84,11 @@ start = (0, 0)
 # onde esta o objeto
 end = (1, 2)
 
-path = solve_maze_dfs(maze, start, end)
-if path:
-    print("Maze solved! Path:")
-    for node in path:
-        print(node)
-else:
-    print("Maze cannot be solved.")
-
-if __name__ == '__main__':
-    solve_maze_dfs(maze, start, end)
-    pass
+def dfs_path():
+    path = solve_maze_dfs(maze, start, end)
+    if path:
+        print("Maze solved! Path:")
+        for node in path:
+            print(node)
+    else:
+        print("Maze cannot be solved.")
