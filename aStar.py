@@ -2,6 +2,7 @@ import heapq
 import time
 from pygame_test import *
 from bfs import validCoordinates
+from collections import deque
 
 def validOrientation(orientation):
     # Assuming orientation is represented as an integer or a string, adjust as needed
@@ -49,6 +50,7 @@ def astar(matrix, start, end, screen, choice):
                         parents[(new_x, new_y)] = (x, y)
 
     return None, screen
+
 def astar_path(matrix, start, end):
     timerS = time.time()
     path = astar(matrix, start, end, screen=0, choice=0)
@@ -56,7 +58,7 @@ def astar_path(matrix, start, end):
     if path:
         timerE = time.time()
         print("Caminho encontrado em " + str(timerE - timerS)+" ms:")
-        for point in path:
+        for(point) in path:
             print(point)
     else:
         print("Não foi possível encontrar um caminho.")
