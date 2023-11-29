@@ -51,12 +51,13 @@ start = (0, 0)
 end = (9, 2)
 
 def bfs_path(matrix, start, end):
+
     timerS = time.time()
     path = bfs(matrix, start, end)
 
     if path:
         timerE = time.time()
-        print("Caminho encontrado em", str(timerE - timerS) + "ms:")
+        print("Caminho encontrado em", str(timerE - timerS) + "s:")
         for point in path:
             print(point)
     else:

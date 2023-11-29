@@ -43,9 +43,9 @@ def dfs(matrix, start, end):
     return None
 
 # matriz 
-matrix = matrix2530
+matrix = matrix10030
 start = (0, 0)
-end = (9, 2)
+end = (92, 53)
 
 def dfs_path(matrix, start, end):
     timerS = time.time()
