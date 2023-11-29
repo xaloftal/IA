@@ -47,13 +47,14 @@ def show_menu_matrices():
 
 def choose_start():
     start_row = input("\nEscolha a linha do ponto inicial: ")
-    start_col = input("\nEscolha a coluna do ponto inicial: ")
+    start_col = input("Escolha a coluna do ponto inicial: ")
 
     return (int(start_row), int(start_col))
 
 def choose_end():
     end_row = input("\nEscolha a linha do objetivo: ")
-    end_col = input("\nEscolha a coluna do objetivo: ")
+    end_col = input("Escolha a coluna do objetivo: ")
+    print("\n")
 
     return (int(end_row), int(end_col))
 
@@ -118,8 +119,3 @@ if __name__ == '__main__':
             break
         else:
             print("Opção inválida. Tente novamente.")
-
-
-    
-
-
