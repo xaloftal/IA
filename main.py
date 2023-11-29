@@ -54,6 +54,7 @@ def choose_start():
 def choose_end():
     end_row = input("\nEscolha a linha do objetivo: ")
     end_col = input("Escolha a coluna do objetivo: ")
+    print("\n")
 
     return (int(end_row), int(end_col))
 
@@ -118,8 +119,3 @@ if __name__ == '__main__':
             break
         else:
             print("Opção inválida. Tente novamente.")
-
-
-    
-
-

@@ -49,6 +49,8 @@ def bfs(matrix, start, end, screen, choice):
     # Se não for possível atingir o objetivo
     return None, screen
 
+
+
 def bfs_path(matrix, start, end):
 
     timerS = time.time()
@@ -61,6 +63,8 @@ def bfs_path(matrix, start, end):
             print(point)
     else:
         print("Não foi possível encontrar um caminho.")
+
+
 
 def bfs_visualization(matrix, start, end, choice):
     pygame.init()
