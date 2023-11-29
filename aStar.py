@@ -3,6 +3,11 @@ import time
 from pygame_test import *
 from bfs import validCoordinates
 
+def validOrientation(orientation):
+    # Assuming orientation is represented as an integer or a string, adjust as needed
+    # This is a placeholder, implement the logic based on your specific representation
+    return orientation in ['up', 'down', 'left', 'right']
+
 def heuristic(node, end):
     return abs(node[0] - end[0]) + abs(node[1] - end[1])
 
@@ -13,16 +18,16 @@ def astar(matrix, start, end, screen, choice):
     cost_so_far = {}
     frontier = [(0, start)]
     evaluated_nodes = []
-    
-    while frontier:
-        current_cost, (x,y) = heapq.heappop(frontier)
 
-        if (x,y) == end:
+    while frontier:
+        current_cost, (x, y) = heapq.heappop(frontier)
+
+        if (x, y) == end:
             path = []
-            while (x,y) is not None:
-                path.insert(0, (x,y))
-                if (x, y) in parents:
-                    (x, y) = parents[(x, y)]
+            while (x, y) in parents:
+                path.insert(0, (x, y))
+                x, y = parents[(x, y)]
+            path.insert(0, (x, y))  # Add the starting point
             return path, screen
 
         if not visited[x][y]:
@@ -44,7 +49,6 @@ def astar(matrix, start, end, screen, choice):
                         parents[(new_x, new_y)] = (x, y)
 
     return None, screen
-
 def astar_path(matrix, start, end):
     timerS = time.time()
     path = astar(matrix, start, end, screen=0, choice=0)
@@ -67,7 +71,9 @@ def astar_visualization(matrix, start, end, choice):
     path, screen = astar(matrix, start, end, screen, choice)
     
     if path:
-        print("Caminho encontrado:", path)
+        print("Caminho encontrado:")
+        for point in path:
+            print(point)
         draw_path(path, screen)
     else:
         print("Caminho não encontrado")
