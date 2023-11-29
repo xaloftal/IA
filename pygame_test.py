@@ -12,13 +12,13 @@ BLACK = (0, 0, 0)
 
 CELL_SIZE = 20
 
-def draw_evaluated(node, screen): #para colorir os pontos já avaliados
-    pygame.draw.rect(screen, RED, (node.y * CELL_SIZE, node.x * CELL_SIZE, CELL_SIZE, CELL_SIZE))
-    pygame.display.update()
-    pygame.time.delay(50)
+def draw_evaluated(evaluated_nodes, screen): #para colorir os pontos já avaliados
+    for x,y in evaluated_nodes:
+        pygame.draw.rect(screen, RED, (y * CELL_SIZE, x * CELL_SIZE, CELL_SIZE, CELL_SIZE))
+        pygame.display.update()
+        pygame.time.delay(50)
 
 def draw_screen (matrix):
-
     width, height = len(matrix[0]) * CELL_SIZE, len(matrix) * CELL_SIZE
     screen = pygame.display.set_mode((width, height))
     pygame.display.set_caption("Algoritmo A*")
