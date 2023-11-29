@@ -25,88 +25,95 @@ def show_submenu():
     return choice_submenu
     
 def show_menu_matrices():
-    print("MENU:")
-    print("1. matriz 2530")
-    print("2. matriz 1010")
-    print("3. Voltar")
-
-    choice_matrices = input("\nEscolha uma opção: ")
-
     while True:
+        print("MENU:")
+        print("1. matriz 2530")
+        print("2. matriz 1010")
+        print("3. matriz 5030")
+        print("4. Voltar")
+
+        choice_matrices = input("\nEscolha uma opção: ")
+
         if choice_matrices == '1':
-            matrix = matrix2530
+            return matrix2530
         elif choice_matrices == '2':
-            matrix = matrix1030
+            return matrix1030
         elif choice_matrices == '3':
-            break
+            return matrix5030
+        elif choice_matrices == '4':
+            return None
         else:
             print("Opção inválida. Tente novamente.")
 
-    return matrix
-
 def choose_start():
-    start_row = input("\nEscolha a linha do ponto incial: ")
-    start_col = input("\nEscolha a coluna do ponto incial: ")
+    start_row = input("\nEscolha a linha do ponto inicial: ")
+    start_col = input("\nEscolha a coluna do ponto inicial: ")
 
-    return (start_row, start_col)
+    return (int(start_row), int(start_col))
 
+def choose_end():
+    end_row = input("\nEscolha a linha do objetivo: ")
+    end_col = input("\nEscolha a coluna do objetivo: ")
 
-def choose_goal():
-    goal_row = input("\nEscolha a linha do objetivo: ")
-    goal_col = input("\nEscolha a coluna do objetivo: ")
-
-    return (goal_row, goal_col)
+    return (int(end_row), int(end_col))
 
 if __name__ == '__main__':
     while True:
         choice = show_menu()
 
-        ####Benchmark####
+        #### Benchmark ####
         if choice == '1':
-           choice_submenu = show_submenu()
+            choice_submenu = show_submenu()
 
-           if choice_submenu == '1':
+            if choice_submenu == '1':
                 matrix = show_menu_matrices()
-                start = choose_start()
-                goal = choose_goal()
-                bfs_path(matrix, start, goal)
+                if matrix:
+                    start = choose_start()
+                    end = choose_end()
+                    bfs_path(matrix, start, end)
+                    break
 
-           elif choice_submenu == '2':
+            elif choice_submenu == '2':
                 matrix = show_menu_matrices()
-                start = choose_start()
-                goal = choose_goal()
-                dfs_path(matrix, start, goal)
+                if matrix:
+                    start = choose_start()
+                    end = choose_end()
+                    dfs_path(matrix, start, end)
+                    break
 
-           elif choice_submenu == '3':
+            elif choice_submenu == '3':
                 matrix = show_menu_matrices()
-                start = choose_start()
-                goal = choose_goal()
-                astar_path(matrix, start, goal)
-           else: 
-            print("Opção inválida. Tente novamente.")
+                if matrix:
+                    start = choose_start()
+                    end = choose_end()
+                    astar_path(matrix, start, end)
+                    break
 
-        ####Visualização gráfica####
-
+        #### Visualização gráfica ####
         elif choice == '2':
             choice_submenu = show_submenu()
             if choice_submenu == '1':
                 matrix = show_menu_matrices()
-                start = choose_start()
-                goal = choose_goal()
-                bfs_visualization()
+                if matrix:
+                    start = choose_start()
+                    end = choose_end()
+                    bfs_visualization(matrix, start, end, choice)
+
             elif choice_submenu == '2':
                 matrix = show_menu_matrices()
-                start = choose_start()
-                goal = choose_goal()
-                dfs_visualization()
+                if matrix:
+                    start = choose_start()
+                    end = choose_end()
+                    dfs_visualization(matrix, start, end, choice)
+                    break
+
             elif choice_submenu == '3':
                 matrix = show_menu_matrices()
-                start = choose_start()
-                goal = choose_goal()
-                astar_visualization()
-            else: 
-                print("Opção inválida. Tente novamente.")
-
+                if matrix:
+                    start = choose_start()
+                    end = choose_end()
+                    astar_visualization(matrix, start, end, choice)
+                    break
         elif choice == '3':
             break
         else:

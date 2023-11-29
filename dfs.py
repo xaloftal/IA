@@ -5,11 +5,12 @@ from fixedMatrices import *
 from pygame_test import *
 
 # algotitmo pesquisa em profundidade
-def dfs(matrix, start, end):
+def dfs(matrix, start, end, screen, choice):
     rows, cols = len(matrix), len(matrix[0])
     visited = [[False] * cols for _ in range(rows)]
     parents = {}  # dicionário para guardar os pais de cada ponto
     stackFrontier = deque([(start, None)])  # guardar o ponto e o pai dele
+    evaluated_nodes = []
 
     while stackFrontier:
         (x, y), parent = stackFrontier.pop() # elimina o ultimo elemento, o mais recente
@@ -24,11 +25,13 @@ def dfs(matrix, start, end):
                     (x, y) = parents[(x, y)]
                 else:
                     break
-            return path
-
+            return path, screen
         
         if not visited[x][y]:
             visited[x][y] = True
+            evaluated_nodes.append((x, y))
+            if choice == '2':
+                draw_evaluated(evaluated_nodes, screen)
 
             # aqui a gente gera os movimentos possíveis
             moves = [(x-1, y), (x+1, y), (x, y-1), (x, y+1)]
@@ -40,16 +43,11 @@ def dfs(matrix, start, end):
                     parents[(new_x, new_y)] = (x, y)
 
     # Se não for possível atingir o objetivo
-    return None
-
-# matriz 
-matrix = matrix10030
-start = (0, 0)
-end = (92, 53)
+    return None, screen
 
 def dfs_path(matrix, start, end):
     timerS = time.time()
-    path = dfs(matrix, start, end)
+    path = dfs(matrix, start, end, screen=0, choice=0)
 
     if path:
         timerE = time.time()
@@ -59,12 +57,13 @@ def dfs_path(matrix, start, end):
     else:
         print("Não foi possível encontrar um caminho.")
 
-def dfs_visualization(matrix, start, goal):
+def dfs_visualization(matrix, start, end, choice):
+    pygame.init()
     running = True
-    draw_screen(matrix)
+    screen = draw_screen(matrix)
     draw_grid(matrix, screen)
 
-    path, screen = solve_maze_dfs(matrix, start, goal, screen)
+    path, screen = dfs(matrix, start, end, screen, choice)
     
     if path:
         print("Caminho encontrado:", path)

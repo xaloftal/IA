@@ -1,105 +1,70 @@
 import heapq
 import time
 from pygame_test import *
+from bfs import validCoordinates
 
-class Node:
-    def __init__(self, x, y, parent=None, g=0, h=0): # inicializa o no com as suas coordenadas, o no parente, o custo do inicio ate este no e o custo heuristico(custo do no ate ao objetivo)
+def heuristic(node, end):
+    return abs(node[0] - end[0]) + abs(node[1] - end[1])
 
-        self.x = x # coordenada x do nó
-        self.y = y # coordenada y do nó
-        self.parent = parent # no parente
-        self.g = g  # custo do inicio ate este no
-        self.h = h  # heuristico (estimado) deste no ate ao objetivo
+def astar(matrix, start, end, screen, choice):
+    rows, cols = len(matrix), len(matrix[0])
+    visited = [[False] * cols for _ in range(rows)]
+    parents = {}
+    cost_so_far = {}
+    frontier = [(0, start)]
+    evaluated_nodes = []
+    
+    while frontier:
+        current_cost, (x,y) = heapq.heappop(frontier)
 
-    def total_cost(self): # retorna a soma de g (custo do inicio ate este no) e h (heuristico (estimado) deste no ate ao objetivo)
+        if (x,y) == end:
+            path = []
+            while (x,y) is not None:
+                path.insert(0, (x,y))
+                if (x, y) in parents:
+                    (x, y) = parents[(x, y)]
+            return path, screen
 
-        return self.g + self.h
+        if not visited[x][y]:
+            visited[x][y] = True
+            evaluated_nodes.append((x, y))
+            if choice == '2':
+                draw_evaluated(evaluated_nodes, screen)
 
-    def __lt__(self, other): #compara dois nos baseados no seu custo total
+            moves = [(x-1, y), (x+1, y), (x, y-1), (x, y+1)]
 
-        # o objeto other e o outro no
-        # retorna TRUE se este no tiver um custo total inferior ao outro no
+            for move in moves:
+                new_x, new_y = move
+                if validCoordinates(new_x, new_y, matrix) and not visited[new_x][new_y]:
+                    new_cost = cost_so_far.get((x, y), 0) + 1  # Assuming a cost of 1 for each step
+                    if (new_x, new_y) not in cost_so_far or new_cost < cost_so_far.get((new_x, new_y), float('inf')):
+                        cost_so_far[(new_x, new_y)] = new_cost
+                        priority = new_cost + heuristic((new_x, new_y), end)
+                        heapq.heappush(frontier, (priority, (new_x, new_y)))
+                        parents[(new_x, new_y)] = (x, y)
 
-        return self.total_cost() < other.total_cost()
+    return None, screen
 
-def heuristic(start, goal): # calcula e retorna o custo heuristico (estimado) de uma certa coordenada até ao objetivo (distância de Manhattan)
-
-    # start representa as coordenas do inicio; goal representa as coordenadas do objetivo
-
-    return abs(start[0] - goal[0]) + abs(start[1] - goal[1])
-
-def get_neighbors(matrix, node): # retorna a lista de nos vizinhos que podem ser atingidos pelo no atual
-
-    # matrix representa a matriz; node representa o no atual
-
-    neighbors = []
-    x, y = node.x, node.y
-
-    for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
-        new_x, new_y = x + dx, y + dy #vetor
-        if 0 <= new_x < len(matrix) and 0 <= new_y < len(matrix[0]) and matrix[new_x][new_y] != 1:
-            neighbors.append(Node(new_x, new_y))
-    return neighbors
-
-def construct_path(node): # retorna o caminho encontrado
-
-    path = []
-    while node:
-        path.append((node.x, node.y))
-        node = node.parent
-    return path[::-1]  # reverte o caminho, para listar as coordenadas do start ate ao goal
-
-def astar(matrix, start, goal,screen): # realiza o algoritmo A* para encontrar o caminho mais curto; retorna a lista de coordenadas que representam o caminho ou nada se não houver caminho
-
-    open_set = []   # numero de nos a serem avaliados
-    closed_set = set()  # nos ja avaliados
-
-    start_node = Node(start[0], start[1], None, 0, heuristic(start, goal)) 
-    heapq.heappush(open_set, start_node)
-
-    while open_set:
-        current_node = heapq.heappop(open_set)
-
-        if (current_node.x, current_node.y) == goal:
-            return construct_path(current_node), screen  # se o objetivo for atingido, retorna o caminho
-
-        closed_set.add((current_node.x, current_node.y))  # marca o no atual como avaliado
-        draw_evaluated(current_node, screen)
-
-        for neighbor in get_neighbors(matrix, current_node):
-            if (neighbor.x, neighbor.y) in closed_set:
-                continue  # salta nos ja avaliados.
-
-            tentative_g = current_node.g + 1  # assumo o custo de um a ir para um vizinho.
-
-            if neighbor not in open_set or tentative_g < neighbor.g:
-                neighbor.g = tentative_g
-                neighbor.h = heuristic((neighbor.x, neighbor.y), goal)
-                neighbor.parent = current_node
-
-                if neighbor not in open_set:
-                    heapq.heappush(open_set, neighbor)
-
-    return None, screen  # nenhum caminho encontrado
-
-def astar_path(matrix, start, goal):
+def astar_path(matrix, start, end):
     timerS = time.time()
-    path = astar(matrix, start, goal)
+    path = astar(matrix, start, end, screen=0, choice=0)
 
     if path:
         timerE = time.time()
         print("Caminho encontrado em " + str(timerE - timerS)+" ms" + ":")
-        print(path)
+        for point in path:
+            print(point)
     else:
         print("Não foi possível encontrar um caminho.")
 
 
-def astar_visualization(matrix, start, goal):
+def astar_visualization(matrix, start, end, choice):
+    pygame.init()
     running = True
-    draw_screen(matrix)
+    screen = draw_screen(matrix)
     draw_grid(matrix, screen)
 
-    path, screen = astar(matrix, start, goal, screen)
+    path, screen = astar(matrix, start, end, screen, choice)
     
     if path:
         print("Caminho encontrado:", path)
