@@ -45,6 +45,8 @@ def dfs(matrix, start, end, screen, choice):
     # Se não for possível atingir o objetivo
     return None, screen
 
+
+# versao sem pygame
 def dfs_path(matrix, start, end):
     timerS = time.time()
     path = dfs(matrix, start, end, screen=0, choice=0)
@@ -57,6 +59,8 @@ def dfs_path(matrix, start, end):
     else:
         print("Não foi possível encontrar um caminho.")
 
+
+# pygame
 def dfs_visualization(matrix, start, end, choice):
     pygame.init()
     running = True
