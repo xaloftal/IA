@@ -54,7 +54,7 @@ def bfs(matrix, start, end, screen, choice):
 def bfs_path(matrix, start, end):
 
     timerS = time.time()
-    path = bfs(matrix, start, end, screen=0, choice=0)
+    path, screen = bfs(matrix, start, end, screen=0, choice=0)
 
     if path:
         timerE = time.time()
@@ -70,7 +70,7 @@ def bfs_visualization(matrix, start, end, choice):
     pygame.init()
     running = True
     screen = draw_screen(matrix)
-    draw_grid(matrix, screen)
+    draw_grid(matrix, screen, start, end)
 
     path, screen = bfs(matrix, start, end, screen, choice)
     

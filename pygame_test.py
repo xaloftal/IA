@@ -25,13 +25,19 @@ def draw_screen (matrix):
 
     return screen
 
-def draw_grid(matrix, screen):
+def draw_grid(matrix, screen, start, end):
     for row in range(len(matrix)):
         for col in range(len(matrix[0])):
             if matrix[row][col] == 1:
                 pygame.draw.rect(screen, BLACK, (col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE))
             elif matrix[row][col] == 0:
                 pygame.draw.rect(screen, WHITE, (col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE))
+                
+            if (row, col) == start:
+                pygame.draw.rect(screen, BLUE, (col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE))
+            elif (row, col) == end:
+                pygame.draw.rect(screen, YELLOW, (col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE))
+            
 
 def draw_path(path, screen):
     for x, y in path:

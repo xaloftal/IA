@@ -4,11 +4,6 @@ from pygame_test import *
 from bfs import validCoordinates
 from collections import deque
 
-def validOrientation(orientation):
-    # Assuming orientation is represented as an integer or a string, adjust as needed
-    # This is a placeholder, implement the logic based on your specific representation
-    return orientation in ['up', 'down', 'left', 'right']
-
 def heuristic(node, end):
     return abs(node[0] - end[0]) + abs(node[1] - end[1])
 
@@ -19,16 +14,16 @@ def astar(matrix, start, end, screen, choice):
     cost_so_far = {}
     frontier = [(0, start)]
     evaluated_nodes = []
-
+    
     while frontier:
-        current_cost, (x, y) = heapq.heappop(frontier)
+        current_cost, (x,y) = heapq.heappop(frontier)
 
-        if (x, y) == end:
+        if (x,y) == end:
             path = []
-            while (x, y) in parents:
-                path.insert(0, (x, y))
-                x, y = parents[(x, y)]
-            path.insert(0, (x, y))  # Add the starting point
+            while (x,y) is not None:
+                path.insert(0, (x,y))
+                if (x, y) in parents:
+                    (x, y) = parents[(x, y)]
             return path, screen
 
         if not visited[x][y]:
@@ -53,13 +48,14 @@ def astar(matrix, start, end, screen, choice):
 
 def astar_path(matrix, start, end):
     timerS = time.time()
-    path = astar(matrix, start, end, screen=0, choice=0)
+    path, screen = astar(matrix, start, end, screen=0, choice=0)
 
     if path:
         timerE = time.time()
         print("Caminho encontrado em " + str(timerE - timerS)+" ms:")
-        for(point) in path:
-            print(point)
+        for x,y in path:
+            print((x,y))
+
     else:
         print("Não foi possível encontrar um caminho.")
 
@@ -68,7 +64,7 @@ def astar_visualization(matrix, start, end, choice):
     pygame.init()
     running = True
     screen = draw_screen(matrix)
-    draw_grid(matrix, screen)
+    draw_grid(matrix, screen, start, end)
 
     path, screen = astar(matrix, start, end, screen, choice)
     

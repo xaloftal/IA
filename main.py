@@ -45,14 +45,15 @@ def show_menu_matrices():
         else:
             print("Opção inválida. Tente novamente.")
 
-def choose_start():
+def choose_start(matrix):
     start_row = input("\nEscolha a linha do ponto inicial: ")
     start_col = input("Escolha a coluna do ponto inicial: ")
 
     return (int(start_row), int(start_col))
+          
 
 def choose_end():
-    end_row = input("\nEscolha a linha do objetivo: ")
+    end_row = input("Escolha a linha do objetivo: ")
     end_col = input("Escolha a coluna do objetivo: ")
     print("\n")
 
