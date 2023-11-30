@@ -6,11 +6,11 @@ from pygame_test import *
 
 # algoritmo pesquisa em profundidade
 def dfs(matrix, start, end, screen, choice):
-    rows, cols = len(matrix), len(matrix[0])
-    visited = [[False] * cols for _ in range(rows)]
+    rows, cols = len(matrix), len(matrix[0]) # tamanho da matriz
+    visited = [[False] * cols for _ in range(rows)] # pontos visitados
     parents = {}  # dicionário para guardar os pais de cada ponto
     stackFrontier = deque([(start, None)])  # guardar o ponto e o pai dele
-    evaluated_nodes = []
+    evaluatedNodes = [] # nos avaliados
 
     while stackFrontier:
         (x, y), parent = stackFrontier.pop() # elimina o ultimo elemento, o mais recente
@@ -29,9 +29,11 @@ def dfs(matrix, start, end, screen, choice):
         
         if not visited[x][y]:
             visited[x][y] = True
-            evaluated_nodes.append((x, y))
+            evaluatedNodes.append((x, y))
+            
+            # caso seja a visualização
             if choice == '2':
-                draw_evaluated(evaluated_nodes, screen)
+                draw_evaluated(evaluatedNodes, screen)
 
             # aqui a gente gera os movimentos possíveis
             moves = [(x-1, y), (x+1, y), (x, y-1), (x, y+1)]
