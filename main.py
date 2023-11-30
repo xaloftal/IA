@@ -4,7 +4,7 @@ from dfs import *
 from aStar import *
 
 def show_menu():
-    print("MENU:")
+    print("\n\nMENU:")
     print("1. Benchmark")
     print("2. Visualização gráfica")
     print("3. Sair")
@@ -14,7 +14,7 @@ def show_menu():
     return choice_menu
 
 def show_submenu():
-    print("MENU:")
+    print("\n\nAlgoritmo:")
     print("1. Algoritmo de pesquisa em largura")
     print("2. Algoritmo de pesquisa em profundidade")
     print("3. A estrela")
@@ -26,7 +26,7 @@ def show_submenu():
     
 def show_menu_matrices():
     while True:
-        print("MENU:")
+        print("\n\nMatriz:")
         print("1. matriz 2530")
         print("2. matriz 1010")
         print("3. matriz 5030")
@@ -45,7 +45,7 @@ def show_menu_matrices():
         else:
             print("Opção inválida. Tente novamente.")
 
-def choose_start(matrix):
+def choose_start():
     start_row = input("\nEscolha a linha do ponto inicial: ")
     start_col = input("Escolha a coluna do ponto inicial: ")
 
