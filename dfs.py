@@ -1,4 +1,5 @@
 import time
+import timeit
 from bfs import validCoordinates
 from collections import deque
 from fixedMatrices import *
@@ -54,13 +55,16 @@ def dfs_path(matrix, start, end):
     path, screen = dfs(matrix, start, end, screen=0, choice=0)
 
     if path:
+       # time.sleep(1)
         timerE = time.time()
-        print("Caminho encontrado em " + str(timerE - timerS)+" s:")
+        timer = timerE - timerS
+        print("Caminho encontrado em " + f"{timer:.8f}" + "s:")
+        # execTime = timeit.timeit(dfs_path, )
         n = 0
         for point in path:
-            n += 1
             print(point)
-            print("Steps: " + str(n))
+            n += 1
+        print("Steps: " + str(n-1))
     else:
         print("Não foi possível encontrar um caminho.")
 

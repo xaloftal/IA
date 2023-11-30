@@ -52,18 +52,19 @@ def bfs(matrix, start, end, screen, choice):
 
 # versão sem o pygame
 def bfs_path(matrix, start, end):
-
     timerS = time.time()
     path, screen = bfs(matrix, start, end, screen=0, choice=0)
 
     if path:
+        time.sleep(1)
         timerE = time.time()
-        print("Caminho encontrado em", str(timerE - timerS) + "s:")
+        timer = timerE - timerS
+        print("Caminho encontrado em " + f"{timer:.8f}" + "s:")
         n = 0
         for point in path:
-            n += 1
             print(point)
-            print("\nSteps: " + n)
+            n += 1
+        print("\nSteps: " + str(n-1))
     else:
         print("Não foi possível encontrar um caminho.")
 
