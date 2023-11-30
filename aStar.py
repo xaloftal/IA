@@ -39,6 +39,7 @@ def construct_path(node):
     while node:
         path.append((node.x, node.y))
         node = node.parent
+        
     return path[::-1]
 
 def get_direction(current_position, next_position):
@@ -69,24 +70,28 @@ def astar(matrix, start, end, screen, choice):
 
         if (x, y) == end:
             path = construct_path(current_node)
-            total_cost = cost_so_far.get((x, y), 0)  # Total cost for the final node
+            total_cost = cost_so_far.get((x, y), 0)  # Custo total do caminho
             return path, total_cost, screen
 
         if not visited[x][y]:
             visited[x][y] = True
             evaluated_nodes.append((x, y))
+
             if choice == '2':
                 draw_evaluated(evaluated_nodes, screen)
 
             for neighbor in get_neighbors(matrix, current_node):
                 new_x, new_y = neighbor.x, neighbor.y
                 new_cost = cost_so_far.get((x, y), 0) + current_node.move_cost
+
                 if (new_x, new_y) not in cost_so_far or new_cost < cost_so_far.get((new_x, new_y), float('inf')):
                     if (x, y) in parents:
                         current_direction = get_direction(parents[(x, y)], (x, y))
                         new_direction = get_direction((x, y), (new_x, new_y))
+
                         if current_direction != new_direction:
                             new_cost += current_node.rotation_cost
+
                     cost_so_far[(new_x, new_y)] = new_cost
                     priority = new_cost + heuristic((new_x, new_y), end)
                     heapq.heappush(frontier, (priority, Node(new_x, new_y, current_node)))
