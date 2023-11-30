@@ -56,8 +56,11 @@ def dfs_path(matrix, start, end):
     if path:
         timerE = time.time()
         print("Caminho encontrado em " + str(timerE - timerS)+" s:")
+        n = 0
         for point in path:
+            n += 1
             print(point)
+            print("Steps: " + str(n))
     else:
         print("Não foi possível encontrar um caminho.")
 
