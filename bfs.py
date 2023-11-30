@@ -13,7 +13,7 @@ def bfs(matrix, start, end, screen, choice):
     rows, cols = len(matrix), len(matrix[0])
     visited = [[False] * cols for _ in range(rows)]
     parents = {}  # dicionário para guardar os pais de cada ponto
-    queueFrontier = deque([(start, None)])  # aqui a gente guarda o ponto e o pai dele
+    queueFrontier = deque([(start, None)])  # aqui guarda o ponto e o pai dele
     evaluated_nodes = []
 
     while queueFrontier:
@@ -21,7 +21,7 @@ def bfs(matrix, start, end, screen, choice):
 
         # se chegou ao objetivo
         if (x, y) == end:
-            # aqui a gente monta o caminho a partir do dicionário de pais
+            # aqui monta o caminho a partir do dicionário de pais
             path = []
             while (x, y) is not None:
                 path.insert(0, (x, y))
@@ -33,11 +33,11 @@ def bfs(matrix, start, end, screen, choice):
 
         if not visited[x][y]:
             visited[x][y] = True
-            evaluated_nodes.append((x, y))  # Store visited node
+            evaluated_nodes.append((x, y))  # Armazenar o nó visitado
             if choice == '2':
-                draw_evaluated(evaluated_nodes, screen)  # Draw visited nodes
+                draw_evaluated(evaluated_nodes, screen)  # desenha os nós visitados
 
-            # aqui a gente gera os movimentos possíveis
+            # gera os movimentos possíveis
             moves = [(x-1, y), (x+1, y), (x, y-1), (x, y+1)]
 
             for move in moves:
@@ -50,7 +50,7 @@ def bfs(matrix, start, end, screen, choice):
     return None, screen
 
 
-
+# versão sem o pygame
 def bfs_path(matrix, start, end):
 
     timerS = time.time()
@@ -68,7 +68,7 @@ def bfs_path(matrix, start, end):
         print("Não foi possível encontrar um caminho.")
 
 
-
+# versão com o pygame
 def bfs_visualization(matrix, start, end, choice):
     pygame.init()
     running = True
