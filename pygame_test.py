@@ -40,8 +40,8 @@ def draw_grid(matrix, screen, start, end):
             
 
 def draw_path(path, screen):
-    for x, y in path:
-        pygame.draw.rect(screen, GREEN, (y * CELL_SIZE, x * CELL_SIZE, CELL_SIZE, CELL_SIZE))
+    for point in path:
+        pygame.draw.rect(screen, GREEN, (point[1] * CELL_SIZE, point[0] * CELL_SIZE, CELL_SIZE, CELL_SIZE))
         pygame.display.update()
         pygame.time.delay(10)
 
