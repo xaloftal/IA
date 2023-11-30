@@ -63,7 +63,7 @@ def bfs_path(matrix, start, end):
         for point in path:
             n += 1
             print(point)
-            print("\nSteps: " + n)
+            print("\nSteps: " + str(n))
     else:
         print("Não foi possível encontrar um caminho.")
 
