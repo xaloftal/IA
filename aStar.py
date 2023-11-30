@@ -16,12 +16,12 @@ def astar(matrix, start, end, screen, choice):
     evaluated_nodes = []
     
     while frontier:
-        current_cost, (x,y) = heapq.heappop(frontier)
+        current_cost, (x, y) = heapq.heappop(frontier)
 
-        if (x,y) == end:
+        if (x, y) == end:
             path = []
-            while (x,y) is not None:
-                path.insert(0, (x,y))
+            while (x, y) is not None:
+                path.insert(0, (x, y))
                 if (x, y) in parents:
                     (x, y) = parents[(x, y)]
             return path, screen
@@ -37,14 +37,32 @@ def astar(matrix, start, end, screen, choice):
             for move in moves:
                 new_x, new_y = move
                 if validCoordinates(new_x, new_y, matrix) and not visited[new_x][new_y]:
-                    new_cost = cost_so_far.get((x, y), 0) + 1  # Assuming a cost of 1 for each step
+                    new_cost = cost_so_far.get((x, y), 0) + 1  # Default move cost is 1
                     if (new_x, new_y) not in cost_so_far or new_cost < cost_so_far.get((new_x, new_y), float('inf')):
+                        # Add rotation cost here
+                        if (x, y) in parents:
+                            current_direction = get_direction(parents[(x, y)], (x, y))
+                            new_direction = get_direction((x, y), (new_x, new_y))
+                            if current_direction != new_direction:
+                                new_cost += 1 #rotation cost
                         cost_so_far[(new_x, new_y)] = new_cost
                         priority = new_cost + heuristic((new_x, new_y), end)
                         heapq.heappush(frontier, (priority, (new_x, new_y)))
                         parents[(new_x, new_y)] = (x, y)
-
     return None, screen
+
+def get_direction(from_pos, to_pos):
+    dx = to_pos[0] - from_pos[0]
+    dy = to_pos[1] - from_pos[1]
+    
+    if dx == 1:
+        return 'right'
+    elif dx == -1:
+        return 'left'
+    elif dy == 1:
+        return 'down'
+    elif dy == -1:
+        return 'up'
 
 def astar_path(matrix, start, end):
     timerS = time.time()
