@@ -4,7 +4,7 @@ from collections import deque
 from fixedMatrices import *
 from pygame_test import *
 
-# algotitmo pesquisa em profundidade
+# algoritmo pesquisa em profundidade
 def dfs(matrix, start, end, screen, choice):
     rows, cols = len(matrix), len(matrix[0])
     visited = [[False] * cols for _ in range(rows)]
