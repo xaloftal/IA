@@ -33,7 +33,8 @@ def show_menu_matrices():
         print("4. matriz 10030")
         print("5. matriz 2550")
         print("6. matriz 5050")
-        print("7. Voltar")
+        print("7. matriz 50050")
+        print("8. Voltar")
 
         choice_matrices = input("\nEscolha uma opção: ")
 
@@ -50,6 +51,8 @@ def show_menu_matrices():
         elif choice_matrices == '6':
             return matrix5050
         elif choice_matrices == '7':
+            return matrix50050
+        elif choice_matrices == '8':
             return None
         else:
             print("Opção inválida. Tente novamente.")
