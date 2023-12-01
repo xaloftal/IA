@@ -27,20 +27,35 @@ def show_submenu():
 def show_menu_matrices():
     while True:
         print("\n\nMatriz:")
-        print("1. matriz 2530")
-        print("2. matriz 1010")
+        print("1. matriz 1030")
+        print("2. matriz 2530")
         print("3. matriz 5030")
-        print("4. Voltar")
+        print("4. matriz 10030")
+        print("5. matriz 15030")
+        print("6. matriz 20030")
+        print("7. matriz 25030")
+        print("8. matriz 30030")
+        print("9. Voltar")
 
         choice_matrices = input("\nEscolha uma opção: ")
 
         if choice_matrices == '1':
-            return matrix2530
-        elif choice_matrices == '2':
             return matrix1030
+        elif choice_matrices == '2':
+            return matrix2530
         elif choice_matrices == '3':
             return matrix5030
         elif choice_matrices == '4':
+            return matrix10030
+        elif choice_matrices == '5':
+            return matrix15030
+        elif choice_matrices == '6':
+            return matrix20030
+        elif choice_matrices == '7':
+            return matrix25030
+        elif choice_matrices == '8':
+            return matrix30030
+        elif choice_matrices == '9':
             return None
         else:
             print("Opção inválida. Tente novamente.")
