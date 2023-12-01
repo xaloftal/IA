@@ -55,7 +55,7 @@ def dfs_path(matrix, start, end):
     path, screen = dfs(matrix, start, end, screen=0, choice=0)
 
     if path:
-       # time.sleep(1)
+        time.sleep(1)
         timerE = time.time()
         timer = timerE - timerS
         print("Caminho encontrado em " + f"{timer:.8f}" + "s:")
