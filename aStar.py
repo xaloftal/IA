@@ -28,8 +28,8 @@ def get_neighbors(matrix, node): # Funcao para encontrar nos vizinos
     neighbors = [] 
     x, y = node.x, node.y
 
-    # Check if the potential neighboring node is within the matrix bounds 
-    # and is not an obstacle (matrix[new_x][new_y] != 1)
+    # Verifica se o potencial no vizinho esta dentro dos limites da matriz
+    # e nao e um obstaculo 
 
     for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
         new_x, new_y = x + dx, y + dy
@@ -38,7 +38,8 @@ def get_neighbors(matrix, node): # Funcao para encontrar nos vizinos
 
     return neighbors
 
-def construct_path(node):
+
+def construct_path(node): # Funcao para construir o caminho
     path = []
     while node:
         path.append((node.x, node.y))
@@ -46,9 +47,9 @@ def construct_path(node):
         
     return path[::-1]
 
-def get_direction(current_position, next_position):
-    dx = next_position[0] - current_position[0]
-    dy = next_position[1] - current_position[1]
+def get_direction(current_position, next_position): # Funcao para obter a direcao da posicao atual para a proxima posicao
+    dx = next_position[0] - current_position[0]  #vetor x
+    dy = next_position[1] - current_position[1]  #vetor y
     
     if dx == 1:     #(x+1, y)
         return 'right'
@@ -59,7 +60,7 @@ def get_direction(current_position, next_position):
     elif dy == -1:  #(x, y-1)
         return 'up'
 
-def astar(matrix, start, end, screen, choice):
+def astar(matrix, start, end, screen, choice):  # Implementacao do algoritmo A Estrela
     rows, cols = len(matrix), len(matrix[0])
     visited = [[False] * cols for _ in range(rows)]
     parents = {}
