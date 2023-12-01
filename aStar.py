@@ -76,8 +76,8 @@ def astar(matrix, start, end, screen, choice):
         current_cost, current_node = heapq.heappop(frontier)
         x, y = current_node.x, current_node.y
 
-        print("Coordenada escolhida:", (x, y))
-        print("\n")
+        #print("Coordenada escolhida:", (x, y))
+        #print("\n")
 
         if (x, y) == end:
             path = construct_path(current_node)
@@ -106,7 +106,7 @@ def astar(matrix, start, end, screen, choice):
                     cost_so_far[(new_x, new_y)] = new_cost
                     priority = new_cost + heuristic((new_x, new_y), end)
 
-                    print("Heuristica nas coordenadas ({}, {}): {}".format(new_x, new_y, heuristic((new_x, new_y), end)))
+                    #print("Heuristica nas coordenadas ({}, {}): {}".format(new_x, new_y, heuristic((new_x, new_y), end)))
                     
                     heapq.heappush(frontier, (priority, Node(new_x, new_y, current_node)))
                     parents[(new_x, new_y)] = (x, y)
