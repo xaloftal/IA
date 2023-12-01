@@ -20,8 +20,9 @@ class Node:
     def __lt__(self, other):
         return self.total_cost() < other.total_cost()
 
-def heuristic(start, goal):
-    return abs(start[0] - goal[0]) + abs(start[1] - goal[1])
+# Calculo da heuristica utilizando a distancia de Manhattan
+def heuristic(current_node, goal):
+    return abs(current_node[0] - goal[0]) + abs(current_node[1] - goal[1])
 
 def get_neighbors(matrix, node):
     neighbors = []
@@ -64,9 +65,16 @@ def astar(matrix, start, end, screen, choice):
     frontier = [(0, start_node)]
     evaluated_nodes = []
 
+    # Imprime a heuristica entre o inicio e o fim
+    print("Heuristica entre o inicio {} e o objetivo {}: {}".format(start, end, start_node.h))
+    print("\n")
+
     while frontier:
         current_cost, current_node = heapq.heappop(frontier)
         x, y = current_node.x, current_node.y
+
+        print("Coordenada escolhida:", (x, y))
+        print("\n")
 
         if (x, y) == end:
             path = construct_path(current_node)
@@ -94,8 +102,12 @@ def astar(matrix, start, end, screen, choice):
 
                     cost_so_far[(new_x, new_y)] = new_cost
                     priority = new_cost + heuristic((new_x, new_y), end)
+
+                    print("Heuristica nas coordenadas ({}, {}): {}".format(new_x, new_y, heuristic((new_x, new_y), end)))
+                    
                     heapq.heappush(frontier, (priority, Node(new_x, new_y, current_node)))
                     parents[(new_x, new_y)] = (x, y)
+        
 
     return None, 0, screen
 
@@ -105,9 +117,12 @@ def astar_path(matrix, start, end):
 
     if path:
         timerE = time.time()
-        print("Caminho encontrado em " + str(timerE - timerS) + " ms:")
-        for x, y in path:
-            print((x, y))
+        print("Caminho encontrado em " f"{timer:.8f}" + "s:")
+        n = 0
+        for point in path:
+            print(point)
+            n += 1
+        print("Steps: " + str(n-1))
 
         print("Custo total do caminho:", total_cost)
 
@@ -124,8 +139,11 @@ def astar_visualization(matrix, start, end, choice):
     
     if path:
         print("Caminho encontrado:")
-        for x,y in path:
-            print((x,y))
+        n = 0
+        for point in path:
+            print(point)
+            n += 1
+        print("Steps: " + str(n-1))
         print("Custo total do caminho:", total_cost)
         draw_path(path, screen)
     else:
