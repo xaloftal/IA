@@ -45,19 +45,49 @@ def show_menu_matrices():
         else:
             print("Opção inválida. Tente novamente.")
 
-def choose_start():
-    start_row = input("\nEscolha a linha do ponto inicial: ")
-    start_col = input("Escolha a coluna do ponto inicial: ")
+def choose_start(matrix):
+    while True:
+        start_row = input("\nEscolha a linha do ponto inicial: ")
+        start_col = input("Escolha a coluna do ponto inicial: ")
 
-    return (int(start_row), int(start_col))
+        if (
+            not start_row.isdigit()
+            or not start_col.isdigit()
+            or int(start_row) < 0
+            or int(start_col) < 0
+            or int(start_row) >= len(matrix)
+            or int(start_col) >= len(matrix[0])
+        ):
+            print("Escolha uma posição válida dentro da matriz.")
+            continue
+
+        if matrix[int(start_row)][int(start_col)] == 1:
+            print("Escolheu um obstáculo. Escolha outro ponto inicial.")
+        else:
+            return int(start_row), int(start_col)
           
+def choose_end(matrix):
+    while True:
+        end_row = input("Escolha a linha do objetivo: ")
+        end_col = input("Escolha a coluna do objetivo: ")
+        print("\n")
 
-def choose_end():
-    end_row = input("Escolha a linha do objetivo: ")
-    end_col = input("Escolha a coluna do objetivo: ")
-    print("\n")
+        if (
+            not end_row.isdigit()
+            or not end_col.isdigit()
+            or int(end_row) < 0
+            or int(end_col) < 0
+            or int(end_row) >= len(matrix)
+            or int(end_col) >= len(matrix[0])
+        ):
+                print("Escolha uma posição válida dentro da matriz.")
+                continue
 
-    return (int(end_row), int(end_col))
+        if matrix[int(end_row)][int(end_col)] == 1:
+            print("Escolheu um obstáculo. Escolha outro ponto inicial.")
+        else:
+            return int(end_row), int(end_col)
+
 
 if __name__ == '__main__':
     while True:
@@ -70,24 +100,24 @@ if __name__ == '__main__':
             if choice_submenu == '1':
                 matrix = show_menu_matrices()
                 if matrix:
-                    start = choose_start()
-                    end = choose_end()
+                    start = choose_start(matrix)
+                    end = choose_end(matrix)
                     bfs_path(matrix, start, end)
                     break
 
             elif choice_submenu == '2':
                 matrix = show_menu_matrices()
                 if matrix:
-                    start = choose_start()
-                    end = choose_end()
+                    start = choose_start(matrix)
+                    end = choose_end(matrix)
                     dfs_path(matrix, start, end)
                     break
 
             elif choice_submenu == '3':
                 matrix = show_menu_matrices()
                 if matrix:
-                    start = choose_start()
-                    end = choose_end()
+                    start = choose_start(matrix)
+                    end = choose_end(matrix)
                     astar_path(matrix, start, end)
                     break
 
@@ -97,23 +127,23 @@ if __name__ == '__main__':
             if choice_submenu == '1':
                 matrix = show_menu_matrices()
                 if matrix:
-                    start = choose_start()
-                    end = choose_end()
+                    start = choose_start(matrix)
+                    end = choose_end(matrix)
                     bfs_visualization(matrix, start, end, choice)
 
             elif choice_submenu == '2':
                 matrix = show_menu_matrices()
                 if matrix:
-                    start = choose_start()
-                    end = choose_end()
+                    start = choose_start(matrix)
+                    end = choose_end(matrix)
                     dfs_visualization(matrix, start, end, choice)
                     break
 
             elif choice_submenu == '3':
                 matrix = show_menu_matrices()
                 if matrix:
-                    start = choose_start()
-                    end = choose_end()
+                    start = choose_start(matrix)
+                    end = choose_end(matrix)
                     astar_visualization(matrix, start, end, choice)
                     break
         elif choice == '3':

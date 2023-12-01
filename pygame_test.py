@@ -10,7 +10,7 @@ RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 BLACK = (0, 0, 0)
 
-CELL_SIZE = 20
+CELL_SIZE = 10
 
 def draw_evaluated(evaluated_nodes, screen): #para colorir os pontos já avaliados
     for x,y in evaluated_nodes:
@@ -20,7 +20,7 @@ def draw_evaluated(evaluated_nodes, screen): #para colorir os pontos já avaliad
 
 def draw_screen (matrix):
     width, height = len(matrix[0]) * CELL_SIZE, len(matrix) * CELL_SIZE
-    screen = pygame.display.set_mode((width, height))
+    screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
     pygame.display.set_caption("Algoritmo A*")
 
     return screen
@@ -40,8 +40,8 @@ def draw_grid(matrix, screen, start, end):
             
 
 def draw_path(path, screen):
-    for x, y in path:
-        pygame.draw.rect(screen, GREEN, (y * CELL_SIZE, x * CELL_SIZE, CELL_SIZE, CELL_SIZE))
+    for point in path:
+        pygame.draw.rect(screen, GREEN, (point[1] * CELL_SIZE, point[0] * CELL_SIZE, CELL_SIZE, CELL_SIZE))
         pygame.display.update()
         pygame.time.delay(10)
 
