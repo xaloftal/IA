@@ -31,8 +31,8 @@ def show_menu_matrices():
         print("2. matriz 2530")
         print("3. matriz 5030")
         print("4. matriz 10030")
-        print("5. matriz 2530")
-        print("6. matriz 5030")
+        print("5. matriz 2550")
+        print("6. matriz 5050")
         print("7. Voltar")
 
         choice_matrices = input("\nEscolha uma opção: ")
