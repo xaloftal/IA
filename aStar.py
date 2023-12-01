@@ -9,24 +9,27 @@ class Node:
         self.x = x
         self.y = y
         self.parent = parent
-        self.g = g  # Cost from start node to current node
-        self.h = h  # Heuristic cost from current node to goal node
-        self.move_cost = 1 # Cost for moving from parent to current node
-        self.rotation_cost = 1 # Cost for rotating from parent to current node
+        self.g = g  # Custo do no inicial ate ao no atual
+        self.h = h  # Custo heuristico do no atual ate ao objetivo
+        self.move_cost = 1 # Custo do movimento
+        self.rotation_cost = 1 # Custo da rotacao
 
-    def total_cost(self):
-        return self.g + self.h
+    def total_cost(self): # Custo total do no atual
+        return self.g + self.h 
 
-    def __lt__(self, other):
+    def __lt__(self, other): # Comparacao do custo total entre dois nos
         return self.total_cost() < other.total_cost()
 
-# Calculo da heuristica utilizando a distancia de Manhattan
-def heuristic(current_node, goal):
+
+def heuristic(current_node, goal): # Calculo da heuristica utilizando a distancia de Manhattan
     return abs(current_node[0] - goal[0]) + abs(current_node[1] - goal[1])
 
-def get_neighbors(matrix, node):
-    neighbors = []
+def get_neighbors(matrix, node): # Funcao para encontrar nos vizinos
+    neighbors = [] 
     x, y = node.x, node.y
+
+    # Check if the potential neighboring node is within the matrix bounds 
+    # and is not an obstacle (matrix[new_x][new_y] != 1)
 
     for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
         new_x, new_y = x + dx, y + dy
@@ -116,8 +119,10 @@ def astar_path(matrix, start, end):
     path, total_cost, screen = astar(matrix, start, end, screen=0, choice=0)
 
     if path:
+        time.sleep(1)
         timerE = time.time()
-        print("Caminho encontrado em " f"{timer:.8f}" + "s:")
+        timer = timerE - timerS
+        print("Caminho encontrado em " + f"{timer:.8f}" + "s:")
         n = 0
         for point in path:
             print(point)
