@@ -2,7 +2,8 @@ import time
 import timeit
 from bfs import validCoordinates
 from collections import deque
-from fixedMatrices import *
+from matriz30 import *
+from matriz50 import *
 from pygame_test import *
 
 # algoritmo pesquisa em profundidade

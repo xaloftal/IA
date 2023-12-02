@@ -1,4 +1,5 @@
-from fixedMatrices import *
+from matriz30 import *
+from matriz50 import *
 from bfs import *
 from dfs import *
 from aStar import *

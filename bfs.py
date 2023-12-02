@@ -1,6 +1,7 @@
 from collections import deque
 import time
-from fixedMatrices import *
+from matriz30 import *
+from matriz50 import *
 from pygame_test import *
 
 # verifica se coordenada é valida
