@@ -59,13 +59,17 @@ def dfs_path(matrix, start, end):
         time.sleep(1)
         timerE = time.time()
         timer = timerE - timerS
-        print("Caminho encontrado em " + f"{timer:.8f}" + "s:")
-        # execTime = timeit.timeit(dfs_path, )
-        n = 0
-        for point in path:
-            print(point)
-            n += 1
-        print("Steps: " + str(n-1))
+            
+        with open('outputDFS.txt', 'w') as f:
+            sys.stdout = f            
+            print("Caminho encontrado em " + f"{timer:.8f}" + "s:")
+                # execTime = timeit.timeit(dfs_path, )
+            n = 0
+            for point in path:
+                print(point)
+                n += 1
+            print("Steps: " + str(n-1))
+            sys.stdout = sys.__stdout__
     else:
         print("Não foi possível encontrar um caminho.")
 
