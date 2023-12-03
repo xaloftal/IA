@@ -1,6 +1,6 @@
 import numpy as np
 
-A = np.random.choice([0, 1], size=(300, 300), p=[0.7, 0.3])
+A = np.random.choice([0, 1], size=(1000, 1200), p=[0.5, 0.5])
 
 # Convert array elements to strings and join with commas
 matrix = np.array2string(A, separator=',', formatter={'int': lambda x: f'{x:,}'})

@@ -121,7 +121,7 @@ def choose_end(matrix):
                 continue
 
         if matrix[int(end_row)][int(end_col)] == 1:
-            print("Escolheu um obstáculo. Escolha outro ponto inicial.")
+            print("Escolheu um obstáculo. Escolha outro ponto para o objetivo.")
         else:
             return int(end_row), int(end_col)
 
