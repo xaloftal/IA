@@ -1,0 +1,7 @@
+Caminho encontrado em 1.01442051s:
+(0, 0)
+(0, 1)
+(1, 1)
+(1, 2)
+(2, 2)
+Steps: 4
