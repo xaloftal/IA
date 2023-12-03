@@ -5,17 +5,19 @@ from collections import deque
 from matriz30 import *
 from matriz50 import *
 from pygame_test import *
+from aStar import get_direction
 
 # algoritmo pesquisa em profundidade
 def dfs(matrix, start, end, screen, choice):
     rows, cols = len(matrix), len(matrix[0]) # tamanho da matriz
     visited = [[False] * cols for _ in range(rows)] # pontos visitados
     parents = {}  # dicionário para guardar os pais de cada ponto
-    stackFrontier = deque([(start, None)])  # guardar o ponto e o pai dele
+    stackFrontier = deque([(start, None, 0, 0)])  # guardar o ponto e o pai dele
     evaluatedNodes = [] # nos avaliados
+    total_cost = 0
 
     while stackFrontier:
-        (x, y), parent = stackFrontier.pop() # elimina o ultimo elemento, o mais recente
+        (x, y), parent, move_cost, rotation_cost = stackFrontier.pop() # elimina o ultimo elemento, o mais recente
 
         # se chegou ao objetivo
         if (x, y) == end:
@@ -24,10 +26,11 @@ def dfs(matrix, start, end, screen, choice):
             while (x, y) is not None:
                 path.insert(0, (x, y))
                 if (x, y) in parents:
-                    (x, y) = parents[(x, y)]
+                    (x, y, move_cost, rotation_cost) = parents[(x, y)]
+                    total_cost += move_cost + rotation_cost  # Atualiza o custo total
                 else:
                     break
-            return path, screen
+            return path, total_cost, screen
         
         if not visited[x][y]:
             visited[x][y] = True
@@ -43,17 +46,26 @@ def dfs(matrix, start, end, screen, choice):
             for move in moves:
                 new_x, new_y = move
                 if validCoordinates(new_x, new_y, matrix) and not visited[new_x][new_y]:
-                    stackFrontier.append(((new_x, new_y), (x, y)))  # Atualiza o pai
-                    parents[(new_x, new_y)] = (x, y)
+                    new_move_cost = 1  # custo do movimento
+                    new_rotation_cost = 0  # custo da rotacao se nao houver mudanca de direcao
+
+                    if parent is not None:
+                        current_direction = get_direction(parent, (x, y))
+                        next_direction = get_direction((x, y), (new_x, new_y))
+                        if current_direction != next_direction:
+                            new_rotation_cost = 1  # custo da rotacao se houver mudanca de direcao
+                    stackFrontier.append(((new_x, new_y), (x, y, new_move_cost, new_rotation_cost), new_move_cost, new_rotation_cost)) # atualiza o pai
+                    parents[(new_x, new_y)] = (x, y, new_move_cost, new_rotation_cost)
+
 
     # Se não for possível atingir o objetivo
-    return None, screen
+    return None, 0, screen
 
 
 # versao sem pygame
 def dfs_path(matrix, start, end):
     timerS = time.time()
-    path, screen = dfs(matrix, start, end, screen=0, choice=0)
+    path, total_cost, screen = dfs(matrix, start, end, screen=0, choice=0)
 
     if path:
         time.sleep(1)
@@ -69,6 +81,7 @@ def dfs_path(matrix, start, end):
                 print(point)
                 n += 1
             print("Steps: " + str(n-1))
+            print("Custo total do caminho:", total_cost)
             sys.stdout = sys.__stdout__
     else:
         print("Não foi possível encontrar um caminho.")
@@ -81,10 +94,11 @@ def dfs_visualization(matrix, start, end, choice):
     screen = draw_screen(matrix)
     draw_grid(matrix, screen, start, end)
 
-    path, screen = dfs(matrix, start, end, screen, choice)
+    path, total_cost, screen = dfs(matrix, start, end, screen, choice)
     
     if path:
         print("Caminho encontrado:", path)
+        print("Custo total do caminho:", total_cost)
         draw_path(path, screen)
     else:
         print("Caminho não encontrado")
