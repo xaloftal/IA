@@ -1,4 +1,4 @@
-Caminho encontrado em 1.00164604s:
+Caminho encontrado em 1.00109482s:
 (0, 0)
 (0, 1)
 (1, 1)
@@ -9,4 +9,4 @@ Caminho encontrado em 1.00164604s:
 (3, 4)
 (3, 3)
 Steps: 8
-Custo total do caminho: 14
+Custo total do caminho: 13

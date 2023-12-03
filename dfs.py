@@ -46,10 +46,11 @@ def dfs(matrix, start, end, screen, choice):
             for move in moves:
                 new_x, new_y = move
                 if validCoordinates(new_x, new_y, matrix) and not visited[new_x][new_y]:
-                    new_move_cost = 1  # custo do movimento
+                    new_move_cost = 0 # custo do movimento
                     new_rotation_cost = 0  # custo da rotacao se nao houver mudanca de direcao
 
                     if parent is not None:
+                        new_move_cost = 1 
                         current_direction = get_direction(parent, (x, y))
                         next_direction = get_direction((x, y), (new_x, new_y))
                         if current_direction != next_direction:

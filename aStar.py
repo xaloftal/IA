@@ -1,8 +1,12 @@
 import heapq
 import time
 from pygame_test import *
-from bfs import validCoordinates
 from collections import deque
+
+# verifica se coordenada é valida
+def validCoordinates(x, y, matrix):
+    rows, cols = len(matrix), len(matrix[0])
+    return 0 <= x < rows and 0 <= y < cols and matrix[x][y] == 0
 
 class Node:
     def __init__(self, x, y, parent=None, g=0, h=0, ):
