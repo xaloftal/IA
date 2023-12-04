@@ -64,22 +64,13 @@ def show_menu_matrices():
             return matrix40030
         elif choice_matrices == '8':
             return matrix50030
-        
         elif choice_matrices == '9':
             return matrix1045
         elif choice_matrices == '10':
             return matrix2545
         elif choice_matrices == '11':
-            return matrix10050
+            return matrix5045
         elif choice_matrices == '12':
-            return matrix25050
-        elif choice_matrices == '13':
-            return matrix30050
-        elif choice_matrices == '14':
-            return matrix40050
-        elif choice_matrices == '15':
-            return matrix50050
-        elif choice_matrices == '16':
             return None
         else:
             print("Opção inválida. Tente novamente.")
