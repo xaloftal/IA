@@ -1,5 +1,6 @@
 from matriz30 import *
 from matriz50 import *
+from matriz45 import *
 from bfs import *
 from dfs import *
 from aStar import *
@@ -38,7 +39,12 @@ def show_menu_matrices():
         print("8. matriz 50030")
         print("9. matriz 2550")
         print("10. matriz 5050")
-        print("11. Voltar")
+        print("11. matriz 10050")
+        print("12. matriz 25050")
+        print("13. matriz 30050")
+        print("14. matriz 40050")
+        print("15. matriz 50050")
+        print("16. Voltar")
 
         choice_matrices = input("\nEscolha uma opção: ")
 
@@ -58,11 +64,22 @@ def show_menu_matrices():
             return matrix40030
         elif choice_matrices == '8':
             return matrix50030
+        
         elif choice_matrices == '9':
-            return matrix2550
+            return matrix1045
         elif choice_matrices == '10':
-            return matrix5050
+            return matrix2545
         elif choice_matrices == '11':
+            return matrix10050
+        elif choice_matrices == '12':
+            return matrix25050
+        elif choice_matrices == '13':
+            return matrix30050
+        elif choice_matrices == '14':
+            return matrix40050
+        elif choice_matrices == '15':
+            return matrix50050
+        elif choice_matrices == '16':
             return None
         else:
             print("Opção inválida. Tente novamente.")
