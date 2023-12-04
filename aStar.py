@@ -3,7 +3,7 @@ import time
 from pygame_test import *
 from collections import deque
 
-# verifica se coordenada é valida
+# verifica se a coordenada e valida
 def validCoordinates(x, y, matrix):
     rows, cols = len(matrix), len(matrix[0])
     return 0 <= x < rows and 0 <= y < cols and matrix[x][y] == 0
@@ -13,26 +13,29 @@ class Node:
         self.x = x
         self.y = y
         self.parent = parent
-        self.g = g  # Custo do no inicial ate ao no atual
-        self.h = h  # Custo heuristico do no atual ate ao objetivo
-        self.move_cost = 1 # Custo do movimento
-        self.rotation_cost = 1 # Custo da rotacao
+        self.g = g  # custo do no inicial ate ao no atual
+        self.h = h  # custo heuristico do no atual ate ao objetivo
+        self.move_cost = 1 # custo do movimento
+        self.rotation_cost = 1 # custo da rotacao
 
-    def total_cost(self): # Custo total do no atual
+    # custo total do no atual
+    def total_cost(self): 
         return self.g + self.h 
-
-    def __lt__(self, other): # Comparacao do custo total entre dois nos
+    
+    # comparacao do custo total entre dois nos
+    def __lt__(self, other): 
         return self.total_cost() < other.total_cost()
 
-
-def heuristic(current_node, goal): # Calculo da heuristica utilizando a distancia de Manhattan
+# calculo da heuristica utilizando a distancia de Manhattan
+def heuristic(current_node, goal): 
     return abs(current_node[0] - goal[0]) + abs(current_node[1] - goal[1])
 
-def get_neighbors(matrix, node): # Funcao para encontrar nos vizinos
+# funcao para encontrar nos vizinhos
+def get_neighbors(matrix, node): 
     neighbors = [] 
     x, y = node.x, node.y
 
-    # Verifica se o potencial no vizinho esta dentro dos limites da matriz
+    # verifica se o potencial no vizinho esta dentro dos limites da matriz
     # e nao e um obstaculo 
 
     for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
@@ -42,8 +45,8 @@ def get_neighbors(matrix, node): # Funcao para encontrar nos vizinos
 
     return neighbors
 
-
-def construct_path(node): # Funcao para construir o caminho
+# funcao para construir o caminho
+def construct_path(node): 
     path = []
     while node:
         path.append((node.x, node.y))
@@ -51,7 +54,8 @@ def construct_path(node): # Funcao para construir o caminho
         
     return path[::-1]
 
-def get_direction(current_position, next_position): # Funcao para obter a direcao da posicao atual para a proxima posicao
+# funcao para obter a direcao da posicao atual para a proxima posicao
+def get_direction(current_position, next_position):
     dx = next_position[0] - current_position[0]  #vetor x
     dy = next_position[1] - current_position[1]  #vetor y
     
@@ -63,17 +67,18 @@ def get_direction(current_position, next_position): # Funcao para obter a direca
         return 'down'
     elif dy == -1:  #(x, y-1)
         return 'up'
-
-def astar(matrix, start, end, screen, choice):  # Implementacao do algoritmo A Estrela
+    
+# implementacao do algoritmo A Estrela
+def astar(matrix, start, end, screen, choice): 
     rows, cols = len(matrix), len(matrix[0])
     visited = [[False] * cols for _ in range(rows)]
     parents = {}
-    cost_so_far = {}
+    cost_so_far = {}  # dicionario para armazenar o custo acumulado
     start_node = Node(start[0], start[1], g=0, h=heuristic(start, end))
     frontier = [(0, start_node)]
     evaluated_nodes = []
 
-    # Imprime a heuristica entre o inicio e o fim
+    # imprime a heuristica entre o inicio e o fim
     print("Heuristica entre o inicio {} e o objetivo {}: {}".format(start, end, start_node.h))
     print("\n")
 
@@ -86,35 +91,41 @@ def astar(matrix, start, end, screen, choice):  # Implementacao do algoritmo A E
 
         if (x, y) == end:
             path = construct_path(current_node)
-            total_cost = cost_so_far.get((x, y), 0)  # Custo total do caminho
+            total_cost = cost_so_far.get((x, y), 0)  # custo total do caminho
             return path, total_cost, screen
 
+        # marca o no atual como visitado
         if not visited[x][y]:
-            visited[x][y] = True
+            visited[x][y] = True 
             evaluated_nodes.append((x, y))
 
             if choice == '2':
                 draw_evaluated(evaluated_nodes, screen)
 
+            # explora os vizinhos do no atual
             for neighbor in get_neighbors(matrix, current_node):
                 new_x, new_y = neighbor.x, neighbor.y
                 new_cost = cost_so_far.get((x, y), 0) + current_node.move_cost
 
+                # se as novas coordenadas nao foram visitadas ou o novo custo e menor
                 if (new_x, new_y) not in cost_so_far or new_cost < cost_so_far.get((new_x, new_y), float('inf')):
+                    # se o nó anterior existe, verificar se há mudança de direção
                     if (x, y) in parents:
                         current_direction = get_direction(parents[(x, y)], (x, y))
                         new_direction = get_direction((x, y), (new_x, new_y))
 
+                        # se houver mudança de direcao, adicionar o custo da rotacao = 1
                         if current_direction != new_direction:
                             new_cost += current_node.rotation_cost
 
+                    # atualiza o custo e a fila de prioridade
                     cost_so_far[(new_x, new_y)] = new_cost
-                    priority = new_cost + heuristic((new_x, new_y), end)
+                    priority = new_cost + heuristic((new_x, new_y), end) 
 
                     #print("Heuristica nas coordenadas ({}, {}): {}".format(new_x, new_y, heuristic((new_x, new_y), end)))
                     
-                    heapq.heappush(frontier, (priority, Node(new_x, new_y, current_node)))
-                    parents[(new_x, new_y)] = (x, y)
+                    heapq.heappush(frontier, (priority, Node(new_x, new_y, current_node))) # adiciona o novo no a fila de prioridade para exploracao futura
+                    parents[(new_x, new_y)] = (x, y) # atualiza o pai do no atual
         
 
     return None, 0, screen
@@ -131,7 +142,6 @@ def astar_path(matrix, start, end):
         with open('outputAStar.txt', 'w') as f:
             sys.stdout = f            
             print("Caminho encontrado em " + f"{timer:.8f}" + "s:")
-                # execTime = timeit.timeit(dfs_path, )
             n = 0
             for point in path:
                 print(point)
