@@ -38,12 +38,7 @@ def show_menu_matrices():
         print("8. matriz 50030")
         print("9. matriz 2550")
         print("10. matriz 5050")
-        print("11. matriz 10050")
-        print("12. matriz 25050")
-        print("13. matriz 30050")
-        print("14. matriz 40050")
-        print("15. matriz 50050")
-        print("16. Voltar")
+        print("11. Voltar")
 
         choice_matrices = input("\nEscolha uma opção: ")
 
@@ -68,16 +63,6 @@ def show_menu_matrices():
         elif choice_matrices == '10':
             return matrix5050
         elif choice_matrices == '11':
-            return matrix10050
-        elif choice_matrices == '12':
-            return matrix25050
-        elif choice_matrices == '13':
-            return matrix30050
-        elif choice_matrices == '14':
-            return matrix40050
-        elif choice_matrices == '15':
-            return matrix50050
-        elif choice_matrices == '16':
             return None
         else:
             print("Opção inválida. Tente novamente.")
