@@ -1,4 +1,4 @@
-Caminho encontrado em 1.01142979s:
+Caminho encontrado em 1.02075505s:
 (0, 0)
 (0, 1)
 (0, 2)
